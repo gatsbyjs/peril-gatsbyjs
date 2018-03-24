@@ -3,6 +3,7 @@
     "onlyForOrgMembers": false
   },
   "rules": {
+    "issues.opened": "Moya/moya-peril@org/issue.ts"
   },
   "repos": {
   }

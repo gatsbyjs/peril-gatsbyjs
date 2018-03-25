@@ -42,7 +42,7 @@ if (title.includes("enhancement")) {
   labelsToAdd.push("enhancement")
 } else {
   for (var i = 1; i < enhanceWords.length; i++) {
-    if (title.includes(enhanceWords[i])) {
+    if (title.startsWith(enhanceWords[i])) {
       labelsToAdd.push("enhancement")
       break
     }

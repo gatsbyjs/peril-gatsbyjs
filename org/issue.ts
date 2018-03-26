@@ -5,75 +5,77 @@ const issue = gh.issue;
 const repo = gh.repository;
 
 const title = issue.title.toLowerCase()
+const titleWords = title.split(" ")
 
 var labelsToAdd: string[] = []
 
 // label: question
 
-const qWords: string[] = ["how", "who", "what", "where", "when", "why", "which"]
+const questionWords: Set<string> = new Set(["how", "who", "what", "where", "when", "why", "which"])
 
-if (issue.title.slice(-1) == "?") {
+if (titleEndsInQuestionMark() || titleStartsWithAny(questionWords)) {
   labelsToAdd.push("question")
-} else {
-  for (var i = 0; i < qWords.length; i++) {
-    if (title.startsWith(qWords[i])) {
-      labelsToAdd.push("question")
-      break
-    }
-  }
 }
 
 // label: documentation
 
-const docWords: string[] = ["documentation", "document", "docs", "readme", "changelog", ".md"]
+const documentationWords: Set<string> = new Set(["documentation", "document", "docs", "doc", "readme", "changelog"])
 
-for (var i = 1; i < docWords.length; i++) {
-  if (title.includes(docWords[i])) {
-    labelsToAdd.push("documentation")
-    break
-  }
+if (titleStartsWithAny(documentationWords)) {
+  labelsToAdd.push("documentation")
 }
 
 // label: enhancement
 
-const enhanceWords: string[] = ["add", "allow", "improve", "upgrade", "update", "support"]
+const enhancementWords: Set<string> = new Set(["add", "allow", "improve", "upgrade", "update", "support"])
 
-if (title.includes("enhancement")) {
+if (titleStartsWithAny(enhancementWords)) {
   labelsToAdd.push("enhancement")
-} else {
-  for (var i = 1; i < enhanceWords.length; i++) {
-    if (title.startsWith(enhanceWords[i])) {
-      labelsToAdd.push("enhancement")
-      break
-    }
-  }
 }
 
 // label: cocoapods
 
-const podWords: string[] = ["pod", "cocoapods"]
+const cocoaPodsWords: Set<string> = new Set(["pod", "cocoapod", "cocoapods"])
 
-for (var i = 1; i < podWords.length; i++) {
-  if (title.includes(podWords[i])) {
-    labelsToAdd.push("cocoapods")
-    break
-  }
+if (titleIncludesAny(cocoaPodsWords)) {
+  labelsToAdd.push("cocoapods")
 }
 
 // label: carthage
 
-if (title.includes("carthage")) {
+const carthageWords: Set<string> = new Set(["carthage", "cartfile"])
+
+if (titleIncludesAny(carthageWords)) {
   labelsToAdd.push("carthage")
 }
 
 // label: bug?
 
-const bugWords: string[] = ["bug", "crash", "memory leak"]
+const bugWords: Set<string> = new Set(["bug", "crash", "leak"])
 
-for (var i = 1; i < bugWords.length; i++) {
-  if (title.includes(bugWords[i])) {
-    labelsToAdd.push("bug?")
+if (titleIncludesAny(bugWords)) {
+  labelsToAdd.push("bug?")
+}
+
+// Helpers
+
+function titleStartsWithAny(words: Set<string>): boolean  {
+  if (titleWords.length == 0) { return false }
+  const firstWord = titleWords[0]
+  return words.has(firstWord)
+}
+
+function titleIncludesAny(words: Set<string>) {
+  if (titleWords.length == 0) { return false }
+  for (var i = 0; i < titleWords.length; i++) {
+    const titleWord = titleWords[i]
+    if (words.has(titleWord)) { return true }
   }
+  return false
+}
+
+function titleEndsInQuestionMark(): boolean {
+  return title.slice(-1) == "?"
 }
 
 // Adding labels

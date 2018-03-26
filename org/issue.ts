@@ -65,7 +65,7 @@ function titleStartsWithAny(words: Set<string>): boolean  {
   return words.has(firstWord)
 }
 
-function titleIncludesAny(words: Set<string>) {
+function titleIncludesAny(words: Set<string>): boolean {
   if (titleWords.length == 0) { return false }
   for (var i = 0; i < titleWords.length; i++) {
     const titleWord = titleWords[i]

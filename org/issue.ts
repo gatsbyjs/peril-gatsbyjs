@@ -21,7 +21,7 @@ if (titleEndsInQuestionMark() || titleStartsWithAny(questionWords)) {
 
 const documentationWords: Set<string> = new Set(["documentation", "document", "docs", "doc", "readme", "changelog"])
 
-if (titleStartsWithAny(documentationWords)) {
+if (titleIncludesAny(documentationWords)) {
   labelsToAdd.push("documentation")
 }
 
@@ -59,7 +59,7 @@ if (titleIncludesAny(bugWords)) {
 
 // Helpers
 
-function titleStartsWithAny(words: Set<string>): boolean  {
+function titleStartsWithAny(words: Set<string>): boolean {
   if (titleWords.length == 0) { return false }
   const firstWord = titleWords[0]
   return words.has(firstWord)

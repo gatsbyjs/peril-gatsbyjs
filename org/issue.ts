@@ -1,13 +1,40 @@
-import { danger, schedule } from "danger";
+import { danger, schedule } from "danger"
 
-const gh = danger.github as any;
-const issue = gh.issue;
-const repo = gh.repository;
+const gh = danger.github as any
+const issue = gh.issue
+const repo = gh.repository
 
 const title = issue.title.toLowerCase()
-const titleWords = title.split(" ")
+const titleWords = title.split(" ") as string[]
 
 var labelsToAdd: string[] = []
+
+// Helpers
+
+const titleIncludesAny = (words: Set<string>): boolean => {
+  return titleWords.filter(titleWord => words.has(titleWord)).length > 0
+}
+
+const titleStartsWithAny = (words: Set<string>): boolean => {
+  if (titleWords.length == 0) { return false }
+  const firstWord = titleWords[0]
+  return words.has(firstWord)
+}
+
+const titleEndsInQuestionMark = (): boolean => {
+  return title.slice(-1) == "?"
+}
+
+const addLabels = (names: string[]) => {
+  schedule(async () => {
+    await danger.github.api.issues.addLabels({
+      owner: repo.owner.login,
+      repo: repo.name,
+      number: issue.number,
+      labels: names
+    })
+  })
+}
 
 // label: question
 
@@ -57,38 +84,28 @@ if (titleIncludesAny(bugWords)) {
   labelsToAdd.push("bug?")
 }
 
-// Helpers
+// label: rxmoya
 
-function titleStartsWithAny(words: Set<string>): boolean {
-  if (titleWords.length == 0) { return false }
-  const firstWord = titleWords[0]
-  return words.has(firstWord)
+const rxWords: Set<string> = new Set(["rxmoya", "rxswift", "rx"])
+
+if (titleIncludesAny(rxWords)) {
+  labelsToAdd.push("rxmoya") 
 }
 
-function titleIncludesAny(words: Set<string>): boolean {
-  if (titleWords.length == 0) { return false }
-  for (var i = 0; i < titleWords.length; i++) {
-    const titleWord = titleWords[i]
-    if (words.has(titleWord)) { return true }
-  }
-  return false
+// label: reactivemoya
+
+const reactiveWords: Set<string> = new Set(["reactivemoya", "reactiveswift", "rac"])
+
+if (titleIncludesAny(reactiveWords)) {
+  labelsToAdd.push("reactivemoya")
 }
 
-function titleEndsInQuestionMark(): boolean {
-  return title.slice(-1) == "?"
-}
+// label: spm
 
-// Adding labels
+const spmWords: Set<string> = new Set(["spm", "package.swift", "package.resolved"])
 
-function addLabels(names: string[]) {
-  schedule(async () => {
-    await danger.github.api.issues.addLabels({
-      owner: repo.owner.login,
-      repo: repo.name,
-      number: issue.number,
-      labels: names
-    })
-  })
+if (titleIncludesAny(spmWords)) {
+  labelsToAdd.push("spm")
 }
 
 addLabels(labelsToAdd)

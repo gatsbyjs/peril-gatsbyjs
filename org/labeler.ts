@@ -7,7 +7,7 @@ const repo = gh.repository
 const title = issue.title.toLowerCase()
 const titleWords = title.split(" ") as string[]
 
-var labelsToAdd: string[] = []
+let labelsToAdd: string[] = []
 
 // Helpers
 

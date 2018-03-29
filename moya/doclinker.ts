@@ -82,7 +82,7 @@ const commentFooter = `
 
 const isIssueQuestion = (): boolean => {
   const labels = danger.github.issue.labels
-  return labels.map(i => i.name).includes('question')
+  return labels.filter(i => i.name == "question").length > 0
 }
 
 const titleIncludesAny = (words: Set<string>): boolean => {

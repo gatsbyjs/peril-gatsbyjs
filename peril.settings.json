@@ -3,8 +3,7 @@
     "onlyForOrgMembers": false
   },
   "rules": {
-    "issues.opened": "Moya/moya-peril@org/labeler.ts",
-    "issues.labeled": "Moya/moya-peril@moya/doclinker.ts"
+    "issues.opened": "Moya/moya-peril@org/labeler.ts"
   },
   "repos": {
   }

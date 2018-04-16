@@ -32,6 +32,7 @@ export const aeryn = wrap("When a PR is merged, check if the author is in the or
   the Moya GitHub organization – no pressure to accept! If you'd like more 
   information on what that means, check out our [contributor guidelines][c] and
   feel free to reach out to @Moya/core-team with any questions.
+
   [c]: https://github.com/Moya/Moya/blob/master/Contributing.md
   `
 

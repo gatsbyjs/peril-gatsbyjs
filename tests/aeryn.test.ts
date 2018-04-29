@@ -17,6 +17,13 @@ beforeEach(() => {
   dm.markdown = jest.fn();
 });
 
+const res = {
+  data: {
+    total_count: 1
+  },
+  meta: {}
+};
+
 it("doesn't do anything if the PR was closed without merging", () => {
   return aeryn().then(() => {
     expect(dm.markdown).not.toHaveBeenCalled();
@@ -32,6 +39,27 @@ describe("a merged PR", () => {
     dm.danger.github.api = {
       orgs: {
         checkMembership: async () => {}
+      },
+      search: {
+        issues: () => Promise.resolve({ data: { total_count: 1 } })
+      }
+    };
+    return aeryn().then(() => {
+      expect(dm.markdown).not.toHaveBeenCalled();
+    });
+  });
+
+  it("doesn't do anything if it is not the users first PR", () => {
+    const inviteMock = jest.fn();
+    dm.danger.github.api = {
+      search: {
+        issues: () => Promise.resolve({ data: { total_count: 2 } })
+      },
+      orgs: {
+        checkMembership: async () => {
+          throw new Error("Not a member");
+        },
+        addOrgMembership: inviteMock
       }
     };
     return aeryn().then(() => {
@@ -42,6 +70,9 @@ describe("a merged PR", () => {
   it("invites the user", () => {
     const inviteMock = jest.fn();
     dm.danger.github.api = {
+      search: {
+        issues: () => Promise.resolve({ data: { total_count: 1 } })
+      },
       orgs: {
         checkMembership: async () => {
           throw new Error("Not a member");

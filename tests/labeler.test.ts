@@ -19,6 +19,7 @@ beforeEach(() => {
         }
       },
       issue: {
+        labels: [],
         number: 100
       }
     }
@@ -168,6 +169,27 @@ describe("a new issue that contains a bug keyword", () => {
 describe("a new issue that does not contain any label keywords", () => {
   it("does not add any labels", () => {
     dm.danger.github.issue.title = "Not a question";
+    return labeler().then(() => {
+      expect(dm.danger.github.api.issues.addLabels).not.toBeCalled();
+    });
+  });
+});
+
+describe("a new issue that has all possible automatic labels", () => {
+  it("does not add any labels", () => {
+    dm.danger.github.issue = {
+      title: "Add spm rxswift rac pod cartfile doc leak?",
+      labels: [
+        { name: "question" },
+        { name: "enhancement" },
+        { name: "documentation" },
+        { name: "carthage" },
+        { name: "cocoapods" },
+        { name: "spm" },
+        { name: "rxmoya" },
+        { name: "reactivemoya" }
+      ]
+    };
     return labeler().then(() => {
       expect(dm.danger.github.api.issues.addLabels).not.toBeCalled();
     });

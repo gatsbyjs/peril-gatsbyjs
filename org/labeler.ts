@@ -38,6 +38,14 @@ export const labeler = wrap(
       return title.slice(-1) == "?";
     };
 
+    const addLabelIfDoesNotExist = (name: string) => {
+      const labels = danger.github.issue.labels;
+      const hasLabel = labels.map(i => i.name).includes(name);
+      if (!hasLabel) {
+        labelsToAdd.push(name);
+      }
+    };
+
     // label: question
 
     const questionWords: Set<string> = new Set([
@@ -51,7 +59,7 @@ export const labeler = wrap(
     ]);
 
     if (titleEndsInQuestionMark() || titleStartsWithAny(questionWords)) {
-      labelsToAdd.push("question");
+      addLabelIfDoesNotExist("question");
     }
 
     // label: documentation
@@ -66,7 +74,7 @@ export const labeler = wrap(
     ]);
 
     if (titleIncludesAny(documentationWords)) {
-      labelsToAdd.push("documentation");
+      addLabelIfDoesNotExist("documentation");
     }
 
     // label: enhancement
@@ -81,7 +89,7 @@ export const labeler = wrap(
     ]);
 
     if (titleStartsWithAny(enhancementWords)) {
-      labelsToAdd.push("enhancement");
+      addLabelIfDoesNotExist("enhancement");
     }
 
     // label: cocoapods
@@ -93,7 +101,7 @@ export const labeler = wrap(
     ]);
 
     if (titleIncludesAny(cocoaPodsWords)) {
-      labelsToAdd.push("cocoapods");
+      addLabelIfDoesNotExist("cocoapods");
     }
 
     // label: carthage
@@ -101,7 +109,7 @@ export const labeler = wrap(
     const carthageWords: Set<string> = new Set(["carthage", "cartfile"]);
 
     if (titleIncludesAny(carthageWords)) {
-      labelsToAdd.push("carthage");
+      addLabelIfDoesNotExist("carthage");
     }
 
     // label: bug?
@@ -109,7 +117,7 @@ export const labeler = wrap(
     const bugWords: Set<string> = new Set(["bug", "crash", "leak"]);
 
     if (titleIncludesAny(bugWords)) {
-      labelsToAdd.push("bug?");
+      addLabelIfDoesNotExist("bug?");
     }
 
     // label: rxmoya
@@ -117,7 +125,7 @@ export const labeler = wrap(
     const rxWords: Set<string> = new Set(["rxmoya", "rxswift", "rx"]);
 
     if (titleIncludesAny(rxWords)) {
-      labelsToAdd.push("rxmoya");
+      addLabelIfDoesNotExist("rxmoya");
     }
 
     // label: reactivemoya
@@ -129,7 +137,7 @@ export const labeler = wrap(
     ]);
 
     if (titleIncludesAny(reactiveWords)) {
-      labelsToAdd.push("reactivemoya");
+      addLabelIfDoesNotExist("reactivemoya");
     }
 
     // label: spm
@@ -141,7 +149,7 @@ export const labeler = wrap(
     ]);
 
     if (titleIncludesAny(spmWords)) {
-      labelsToAdd.push("spm");
+      addLabelIfDoesNotExist("spm");
     }
 
     if (labelsToAdd.length > 0) {

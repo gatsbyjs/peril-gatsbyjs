@@ -1,111 +1,164 @@
-import { danger, schedule } from "danger"
+import { danger, schedule } from "danger";
 
-const gh = danger.github as any
-const issue = gh.issue
-const repo = gh.repository
+// The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
+const isJest = typeof jest !== "undefined";
+// Returns the promise itself, for testing.
+const _test = (reason: string, promise: Promise<any>) => promise;
+// Schedules the promise for execution via Danger.
+const _run = (reason: string, promise: Promise<any>) => schedule(promise);
+const wrap: any = isJest ? _test : _run;
 
-const title = issue.title.toLowerCase()
-const titleWords = title.split(" ") as string[]
+export const labeler = wrap(
+  "Label newly created issue based on title keywords",
+  async () => {
+    const gh = danger.github as any;
+    const repo = gh.repository;
+    const issue = gh.issue;
 
-let labelsToAdd: string[] = []
+    const title = issue.title.toLowerCase();
+    const titleWords = title.split(" ") as string[];
 
-// Helpers
+    let labelsToAdd: string[] = [];
 
-const titleIncludesAny = (words: Set<string>): boolean => {
-  return titleWords.filter(titleWord => words.has(titleWord)).length > 0
-}
+    // Helpers
 
-const titleStartsWithAny = (words: Set<string>): boolean => {
-  if (titleWords.length == 0) { return false }
-  const firstWord = titleWords[0]
-  return words.has(firstWord)
-}
+    const titleIncludesAny = (words: Set<string>): boolean => {
+      return titleWords.filter(titleWord => words.has(titleWord)).length > 0;
+    };
 
-const titleEndsInQuestionMark = (): boolean => {
-  return title.slice(-1) == "?"
-}
+    const titleStartsWithAny = (words: Set<string>): boolean => {
+      if (titleWords.length == 0) {
+        return false;
+      }
+      const firstWord = titleWords[0];
+      return words.has(firstWord);
+    };
 
-const addLabels = (names: string[]) => {
-  schedule(async () => {
-    await danger.github.api.issues.addLabels({
-      owner: repo.owner.login,
-      repo: repo.name,
-      number: issue.number,
-      labels: names
-    })
-  })
-}
+    const titleEndsInQuestionMark = (): boolean => {
+      return title.slice(-1) == "?";
+    };
 
-// label: question
+    const addLabelIfDoesNotExist = (name: string) => {
+      const labels = danger.github.issue.labels;
+      const hasLabel = labels.map(i => i.name).includes(name);
+      if (!hasLabel) {
+        labelsToAdd.push(name);
+      }
+    };
 
-const questionWords: Set<string> = new Set(["how", "who", "what", "where", "when", "why", "which"])
+    // label: question
 
-if (titleEndsInQuestionMark() || titleStartsWithAny(questionWords)) {
-  labelsToAdd.push("question")
-}
+    const questionWords: Set<string> = new Set([
+      "how",
+      "who",
+      "what",
+      "where",
+      "when",
+      "why",
+      "which"
+    ]);
 
-// label: documentation
+    if (titleEndsInQuestionMark() || titleStartsWithAny(questionWords)) {
+      addLabelIfDoesNotExist("question");
+    }
 
-const documentationWords: Set<string> = new Set(["documentation", "document", "docs", "doc", "readme", "changelog"])
+    // label: documentation
 
-if (titleIncludesAny(documentationWords)) {
-  labelsToAdd.push("documentation")
-}
+    const documentationWords: Set<string> = new Set([
+      "documentation",
+      "document",
+      "docs",
+      "doc",
+      "readme",
+      "changelog"
+    ]);
 
-// label: enhancement
+    if (titleIncludesAny(documentationWords)) {
+      addLabelIfDoesNotExist("documentation");
+    }
 
-const enhancementWords: Set<string> = new Set(["add", "allow", "improve", "upgrade", "update", "support"])
+    // label: enhancement
 
-if (titleStartsWithAny(enhancementWords)) {
-  labelsToAdd.push("enhancement")
-}
+    const enhancementWords: Set<string> = new Set([
+      "add",
+      "allow",
+      "improve",
+      "upgrade",
+      "update",
+      "support"
+    ]);
 
-// label: cocoapods
+    if (titleStartsWithAny(enhancementWords)) {
+      addLabelIfDoesNotExist("enhancement");
+    }
 
-const cocoaPodsWords: Set<string> = new Set(["pod", "cocoapod", "cocoapods"])
+    // label: cocoapods
 
-if (titleIncludesAny(cocoaPodsWords)) {
-  labelsToAdd.push("cocoapods")
-}
+    const cocoaPodsWords: Set<string> = new Set([
+      "pod",
+      "cocoapod",
+      "cocoapods"
+    ]);
 
-// label: carthage
+    if (titleIncludesAny(cocoaPodsWords)) {
+      addLabelIfDoesNotExist("cocoapods");
+    }
 
-const carthageWords: Set<string> = new Set(["carthage", "cartfile"])
+    // label: carthage
 
-if (titleIncludesAny(carthageWords)) {
-  labelsToAdd.push("carthage")
-}
+    const carthageWords: Set<string> = new Set(["carthage", "cartfile"]);
 
-// label: bug?
+    if (titleIncludesAny(carthageWords)) {
+      addLabelIfDoesNotExist("carthage");
+    }
 
-const bugWords: Set<string> = new Set(["bug", "crash", "leak"])
+    // label: bug?
 
-if (titleIncludesAny(bugWords)) {
-  labelsToAdd.push("bug?")
-}
+    const bugWords: Set<string> = new Set(["bug", "crash", "leak"]);
 
-// label: rxmoya
+    if (titleIncludesAny(bugWords)) {
+      addLabelIfDoesNotExist("bug?");
+    }
 
-const rxWords: Set<string> = new Set(["rxmoya", "rxswift", "rx"])
+    // label: rxmoya
 
-if (titleIncludesAny(rxWords)) {
-  labelsToAdd.push("rxmoya") 
-}
+    const rxWords: Set<string> = new Set(["rxmoya", "rxswift", "rx"]);
 
-// label: reactivemoya
+    if (titleIncludesAny(rxWords)) {
+      addLabelIfDoesNotExist("rxmoya");
+    }
 
-const reactiveWords: Set<string> = new Set(["reactivemoya", "reactiveswift", "rac"])
+    // label: reactivemoya
 
-if (titleIncludesAny(reactiveWords)) {
-  labelsToAdd.push("reactivemoya")
-}
+    const reactiveWords: Set<string> = new Set([
+      "reactivemoya",
+      "reactiveswift",
+      "rac"
+    ]);
 
-// label: spm
+    if (titleIncludesAny(reactiveWords)) {
+      addLabelIfDoesNotExist("reactivemoya");
+    }
 
-const spmWords: Set<string> = new Set(["spm", "package.swift", "package.resolved"])
+    // label: spm
 
-if (titleIncludesAny(spmWords)) {
-  labelsToAdd.push("spm")
-}
+    const spmWords: Set<string> = new Set([
+      "spm",
+      "package.swift",
+      "package.resolved"
+    ]);
 
-addLabels(labelsToAdd)
+    if (titleIncludesAny(spmWords)) {
+      addLabelIfDoesNotExist("spm");
+    }
+
+    if (labelsToAdd.length > 0) {
+      await danger.github.api.issues.addLabels({
+        owner: repo.owner.login,
+        repo: repo.name,
+        number: issue.number,
+        labels: labelsToAdd
+      });
+    }
+  }
+);

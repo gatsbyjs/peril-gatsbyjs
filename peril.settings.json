@@ -3,9 +3,11 @@
     "onlyForOrgMembers": false
   },
   "rules": {
-    "issues.opened": "Moya/moya-peril@org/labeler.ts",
+    "issues.opened": [
+      "Moya/moya-peril@org/labeler.ts",
+      "Moya/moya-peril@org/emptybody.ts"
+    ],
     "pull_request.closed": "Moya/moya-peril@org/aeryn.ts"
   },
-  "repos": {
-  }
+  "repos": {}
 }

@@ -16,7 +16,7 @@ Here's some links to the key things
 
 * [Labeler](org/labeler.ts): Attempts to automatically label newly created issues based on keywords in their title.
 
-* [DocLinker](moya/labeler.ts): When an issue is labeled as a question, the bot attempts to recommend useful documentation based on keywords in the issue's title.
+* [DocLinker](moya/doclinker.ts): When an issue is labeled as a question, the bot attempts to recommend useful documentation based on keywords in the issue's title.
 
 * [EmptyBody](org/emptybody.ts): Automatically requests more information from a user who opens a new issue with a blank body.
 

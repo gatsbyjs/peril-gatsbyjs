@@ -1,6 +1,6 @@
 ## Moya's Peril Settings
 
-This is the configuration repo for Peril on the Moya org. There is a [settings file](settings.json) and org-wide
+This is the configuration repo for Peril on the Moya org. There is a [settings file](peril.settings.json) and org-wide
 dangerfiles which are inside the [org folder](org).
 
 Here's some links to the key things

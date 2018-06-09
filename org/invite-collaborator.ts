@@ -12,29 +12,29 @@ export const inviteCollaborator = wrap(
   'Invite the PR author to join as a collaborator',
   async () => {
     const gh = danger.github as any;
-    const pull = gh.pull_request;
-    // const isMerged = pull.merged;
+    const pr = gh.pr;
+    // const isMerged = pr.merged;
     const repo = gh.repository;
-    const username = pull.user.login;
+    const username = pr.user.login;
 
-    // const isCollaborator = await danger.github.api.repos.checkCollaborator({
-    //   owner: repo.owner.login,
-    //   repo: repo.name,
-    //   username
-    // });
+    const isCollaborator = await danger.github.api.repos.checkCollaborator({
+      owner: repo.owner.login,
+      repo: repo.name,
+      username
+    });
 
     // If this PR was sent by an existing collaborator or was NOT merged, do nothing.
-    // if (!isMerged) {
-    //   return;
-    // }
+    if (!isMerged) {
+      return;
+    }
 
     // Invite the PR’s author to become a collaborator on the repo.
-    // await danger.github.api.repos.addCollaborator({
-    //   owner: repo.owner.login,
-    //   repo: repo.name,
-    //   username,
-    //   permission: 'pull' // We trust by default, but only within reason.
-    // });
+    await danger.github.api.repos.addCollaborator({
+      owner: repo.owner.login,
+      repo: repo.name,
+      username,
+      permission: 'pull' // We trust by default, but only within reason.
+    });
 
     const comment = [
       `Holy buckets, @${username} — we just merged your first PR to Gatsby! 💪💜`,
@@ -45,14 +45,14 @@ export const inviteCollaborator = wrap(
       `2. **We’d like to send you some Gatsby swag.** [TKTK add instructions on claiming this.]`,
       ``,
       `DEBUG INFO:`,
-      JSON.stringify(pull, null, 2)
+      JSON.stringify(pr, null, 2)
     ];
 
     // Send our invite comment to the pull request.
     await danger.github.api.issues.createComment({
       owner: repo.owner.login,
       repo: repo.name,
-      number: pull.number,
+      number: pr.number,
       body: comment.join('\n')
     });
   }

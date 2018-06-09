@@ -1,4 +1,4 @@
-import { danger, schedule } from 'danger';
+import { danger, schedule, warn } from 'danger';
 
 // The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
 const isJest = typeof jest !== 'undefined';
@@ -12,10 +12,11 @@ export const inviteCollaborator = wrap(
   'Invite the PR author to join as a collaborator',
   async () => {
     const gh = danger.github as any;
-    const pull = gh.pull_request;
-    // const isMerged = pull.merged;
+    // const pr = gh.pr;
+    // const isMerged = pr.merged;
     const repo = gh.repository;
-    const username = pull.user.login;
+    // const username = pr.user.login;
+    const username = 'jlengstorf'; // XXX temp hack for debugging
 
     // const isCollaborator = await danger.github.api.repos.checkCollaborator({
     //   owner: repo.owner.login,
@@ -45,14 +46,14 @@ export const inviteCollaborator = wrap(
       `2. **We’d like to send you some Gatsby swag.** [TKTK add instructions on claiming this.]`,
       ``,
       `DEBUG INFO:`,
-      JSON.stringify(pull, null, 2)
+      JSON.stringify(danger.github, null, 2)
     ];
 
     // Send our invite comment to the pull request.
     await danger.github.api.issues.createComment({
       owner: repo.owner.login,
       repo: repo.name,
-      number: pull.number,
+      number: 3, // XXX hacky replacement for pr.number,
       body: comment.join('\n')
     });
   }

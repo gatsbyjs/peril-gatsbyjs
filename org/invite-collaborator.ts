@@ -11,33 +11,38 @@ const wrap: any = isJest ? _test : _run;
 export const inviteCollaborator = wrap(
   'Invite the PR author to join as a collaborator',
   async () => {
-    console.log('Is this thing on?');
-    console.log(danger);
     const gh = danger.github as any;
-    // const pr = gh.pr;
-    // const isMerged = pr.merged;
-    const repo = gh.repository;
-    // const username = pr.user.login;
-    const username = 'jlengstorf'; // XXX temp hack for debugging
 
-    // const isCollaborator = await danger.github.api.repos.checkCollaborator({
-    //   owner: repo.owner.login,
-    //   repo: repo.name,
-    //   username
-    // });
+    // Details about the pull request.
+    const isMerged = gh.pr.merged;
+    const username = gh.pr.user.login;
+
+    // Details about the repo.
+    const owner = gh.thisPR.owner;
+    const repo = gh.thisPR.repo;
+    const number = gh.thisPR.number;
+
+    const isCollaborator = await danger.github.api.repos.checkCollaborator({
+      owner,
+      repo,
+      username
+    });
+    console.log('isCollaborator');
+    console.log(isCollaborator);
 
     // If this PR was sent by an existing collaborator or was NOT merged, do nothing.
-    // if (!isMerged) {
-    //   return;
-    // }
+    if (!isMerged) {
+      console.log('This PR was closed but not merged.');
+      return;
+    }
 
     // Invite the PR’s author to become a collaborator on the repo.
-    // await danger.github.api.repos.addCollaborator({
-    //   owner: repo.owner.login,
-    //   repo: repo.name,
-    //   username,
-    //   permission: 'pull' // We trust by default, but only within reason.
-    // });
+    await danger.github.api.repos.addCollaborator({
+      owner,
+      repo,
+      username,
+      permission: 'pull' // We trust by default, but only within reason.
+    });
 
     const comment = [
       `Holy buckets, @${username} — we just merged your first PR to Gatsby! 💪💜`,
@@ -53,9 +58,9 @@ export const inviteCollaborator = wrap(
 
     // Send our invite comment to the pull request.
     await danger.github.api.issues.createComment({
-      owner: repo.owner.login,
-      repo: repo.name,
-      number: 3, // XXX hacky replacement for pr.number,
+      owner,
+      repo,
+      number,
       body: comment.join('\n')
     });
   }

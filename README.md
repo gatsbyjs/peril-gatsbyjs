@@ -30,3 +30,10 @@ This will give you auto-completion and types for Danger mainly.
 
 Peril is Danger running on a web-server, this repo is the configuration for that, currently the dangerfiles in [org](org/)
 run on every issue and pull request for all GatsbyJS Repos.
+
+## TODO
+
+- Credit @\_SD10 for help
+- Verify Heroku account
+- Play with [scheduler](https://github.com/danger/peril/blob/master/source/db/index.ts)
+- Look at auto-labeling issues, autotagging teams

@@ -36,20 +36,12 @@ export const inviteCollaborator = wrap(
       return;
     }
 
-    // Invite the PR’s author to become a collaborator on the repo.
-    await danger.github.api.repos.addCollaborator({
-      owner,
-      repo,
-      username,
-      permission: 'pull' // We trust by default, but only within reason.
-    });
-
     const comment = [
       `Holy buckets, @${username} — we just merged your first PR to Gatsby! 💪💜`,
       ``,
       `Gatsby is built by awesome people like you, and we’d love to say “thanks” in two ways:`,
       ``,
-      `1. **We want to invite you to be a collaborator on GitHub.** This will give you the ability to label issues and to review, approve, and merge pull requests. We’ve just sent the invite, so if you’re interested in being a core part of the Gatsby OSS community, check your email to accept the invite.`,
+      `1. **We want to invite you to be a collaborator on GitHub.** [TKTK build GitHub app to send invite and link to auth flow.]`,
       `2. **We’d like to send you some Gatsby swag.** [TKTK add instructions on claiming this.]`,
       ``,
       `DEBUG INFO:`,

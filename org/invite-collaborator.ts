@@ -13,26 +13,27 @@ export const inviteCollaborator = wrap(
   async () => {
     const gh = danger.github as any;
 
-    // Details about the pull request.
-    const isMerged = gh.pr.merged;
-    const username = gh.pr.user.login;
-
     // Details about the repo.
     const owner = gh.thisPR.owner;
     const repo = gh.thisPR.repo;
     const number = gh.thisPR.number;
 
-    const isCollaborator = await danger.github.api.repos.checkCollaborator({
+    // Details about the pull request.
+    const username = gh.pr.user.login;
+    const isMerged = gh.pr.merged;
+
+    // Check whether or not the PR author is a collaborator.
+    const collabCheck = await danger.github.api.repos.checkCollaborator({
       owner,
       repo,
       username
     });
+    const isCollaborator = collabCheck.meta.status === '204 No Content';
     console.log('isCollaborator');
     console.log(isCollaborator);
 
     // If this PR was sent by an existing collaborator or was NOT merged, do nothing.
-    if (!isMerged) {
-      console.log('This PR was closed but not merged.');
+    if (!isMerged || isCollaborator) {
       return;
     }
 
@@ -42,13 +43,10 @@ export const inviteCollaborator = wrap(
       `Gatsby is built by awesome people like you, and we’d love to say “thanks” in two ways:`,
       ``,
       `1. **We want to invite you to be a collaborator on GitHub.** [TKTK build GitHub app to send invite and link to auth flow.]`,
-      `2. **We’d like to send you some Gatsby swag.** [TKTK add instructions on claiming this.]`,
-      ``,
-      `DEBUG INFO:`,
-      JSON.stringify(danger.github, null, 2)
+      `2. **We’d like to send you some Gatsby swag.** [TKTK add instructions on claiming this.]`
     ];
 
-    // Send our invite comment to the pull request.
+    // For new contributors, roll out the welcome wagon!
     await danger.github.api.issues.createComment({
       owner,
       repo,

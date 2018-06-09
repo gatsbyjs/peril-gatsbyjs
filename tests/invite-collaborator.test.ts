@@ -8,18 +8,20 @@ import { notDeepEqual } from 'assert';
 beforeEach(() => {
   dm.danger = {
     github: {
-      repository: {
-        owner: 'gatsbyjs'
+      thisPR: {
+        owner: 'gatsbyjs',
+        repo: 'peril-gatsbyjs',
+        number: 1
       },
-      pull_request: {
+      pr: {
         user: {
           login: 'someUser'
         }
       },
       api: {
         repos: {
-          addCollaborator: jest.fn(),
-          checkCollaborator: () => Promise.resolve({ status: 404 })
+          checkCollaborator: () =>
+            Promise.resolve({ meta: { status: '404 Not Found' } })
         },
         issues: {
           createComment: jest.fn()
@@ -30,25 +32,26 @@ beforeEach(() => {
 });
 
 describe('a closed pull request', () => {
-  it.skip('was merged and authored by a first-time contributor', () => {
-    dm.danger.github.pull_request.merged = true;
+  it('was merged and authored by a first-time contributor', () => {
+    dm.danger.github.pr.merged = true;
     return inviteCollaborator().then(() => {
-      expect(dm.danger.github.api.repos.addCollaborator).toBeCalled();
+      expect(dm.danger.github.api.issues.createComment).toBeCalled();
     });
   });
 
-  it.skip('was merged and authored by an existing collaborator', () => {
-    dm.danger.github.pull_request.merged = true;
-    dm.danger.github.api.repos.checkCollaborator = () => Promise.resolve(false);
+  it('was merged and authored by an existing collaborator', () => {
+    dm.danger.github.pr.merged = true;
+    dm.danger.github.api.repos.checkCollaborator = () =>
+      Promise.resolve({ meta: { status: '204 No Content' } });
     return inviteCollaborator().then(() => {
-      expect(dm.danger.github.api.repos.addCollaborator).not.toBeCalled();
+      expect(dm.danger.github.api.issues.createComment).not.toBeCalled();
     });
   });
 
   it('was not merged', () => {
-    dm.danger.github.pull_request.merged = false;
+    dm.danger.github.pr.merged = false;
     return inviteCollaborator().then(() => {
-      expect(dm.danger.github.api.repos.addCollaborator).not.toBeCalled();
+      expect(dm.danger.github.api.issues.createComment).not.toBeCalled();
     });
   });
 });

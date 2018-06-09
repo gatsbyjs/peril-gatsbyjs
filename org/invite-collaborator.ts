@@ -1,4 +1,4 @@
-import { danger, schedule } from 'danger';
+import { danger, schedule, warn } from 'danger';
 
 // The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
 const isJest = typeof jest !== 'undefined';
@@ -12,6 +12,7 @@ export const inviteCollaborator = wrap(
   'Invite the PR author to join as a collaborator',
   async () => {
     const gh = danger.github as any;
+    warn(gh);
     const pr = gh.pr;
     // const isMerged = pr.merged;
     const repo = gh.repository;

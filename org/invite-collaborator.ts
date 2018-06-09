@@ -11,8 +11,10 @@ const wrap: any = isJest ? _test : _run;
 export const inviteCollaborator = wrap(
   'Invite the PR author to join as a collaborator',
   async () => {
+    console.log('Is this thing on?');
+    console.log(danger);
     const gh = danger.github as any;
-    const pr = gh.pr;
+    // const pr = gh.pr;
     // const isMerged = pr.merged;
     const repo = gh.repository;
     // const username = pr.user.login;
@@ -53,7 +55,7 @@ export const inviteCollaborator = wrap(
     await danger.github.api.issues.createComment({
       owner: repo.owner.login,
       repo: repo.name,
-      number: pr.number,
+      number: 3, // XXX hacky replacement for pr.number,
       body: comment.join('\n')
     });
   }

@@ -12,30 +12,30 @@ export const inviteCollaborator = wrap(
   'Invite the PR author to join as a collaborator',
   async () => {
     const gh = danger.github as any;
-    warn(gh);
     const pr = gh.pr;
     // const isMerged = pr.merged;
     const repo = gh.repository;
-    const username = pr.user.login;
+    // const username = pr.user.login;
+    const username = 'jlengstorf'; // XXX temp hack for debugging
 
-    const isCollaborator = await danger.github.api.repos.checkCollaborator({
-      owner: repo.owner.login,
-      repo: repo.name,
-      username
-    });
+    // const isCollaborator = await danger.github.api.repos.checkCollaborator({
+    //   owner: repo.owner.login,
+    //   repo: repo.name,
+    //   username
+    // });
 
     // If this PR was sent by an existing collaborator or was NOT merged, do nothing.
-    if (!isMerged) {
-      return;
-    }
+    // if (!isMerged) {
+    //   return;
+    // }
 
     // Invite the PR’s author to become a collaborator on the repo.
-    await danger.github.api.repos.addCollaborator({
-      owner: repo.owner.login,
-      repo: repo.name,
-      username,
-      permission: 'pull' // We trust by default, but only within reason.
-    });
+    // await danger.github.api.repos.addCollaborator({
+    //   owner: repo.owner.login,
+    //   repo: repo.name,
+    //   username,
+    //   permission: 'pull' // We trust by default, but only within reason.
+    // });
 
     const comment = [
       `Holy buckets, @${username} — we just merged your first PR to Gatsby! 💪💜`,
@@ -46,7 +46,7 @@ export const inviteCollaborator = wrap(
       `2. **We’d like to send you some Gatsby swag.** [TKTK add instructions on claiming this.]`,
       ``,
       `DEBUG INFO:`,
-      JSON.stringify(pr, null, 2)
+      JSON.stringify(danger.github, null, 2)
     ];
 
     // Send our invite comment to the pull request.

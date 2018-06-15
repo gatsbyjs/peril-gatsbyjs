@@ -58,18 +58,19 @@ export const inviteCollaborator = wrap(
 `;
 
     try {
-      const github = new Octokit();
+      // const github = new Octokit();
 
-      console.log('We’ve created a new instance of Octokit.');
+      console.log('We’re about to get weird.');
 
-      github.authenticate({
-        type: 'token',
-        token: process.env.GITHUB_TOKEN
-      });
+      // github.authenticate({
+      //   type: 'token',
+      //   token: process.env.GITHUB_TOKEN
+      // });
 
-      console.log('Authentication worked');
+      // console.log('Authentication worked');
 
-      const invite = await github.orgs.addTeamMembership({
+      // const invite = await github.orgs.addTeamMembership({
+      const invite = await api.orgs.addTeamMembership({
         // ID of the @gatsbyjs/maintainers team on GitHub
         team_id: 1942254,
         username

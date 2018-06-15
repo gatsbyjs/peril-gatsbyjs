@@ -1,5 +1,4 @@
-import { danger, schedule } from 'danger';
-import * as Octokit from '@octokit/rest';
+import { danger, schedule, markdown } from 'danger';
 
 // The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
 const isJest = typeof jest !== 'undefined';
@@ -58,38 +57,31 @@ export const inviteCollaborator = wrap(
 `;
 
     try {
-      // const github = new Octokit();
-
-      console.log('We’re about to get weird.');
-
-      // github.authenticate({
-      //   type: 'token',
-      //   token: process.env.GITHUB_TOKEN
-      // });
-
-      // console.log('Authentication worked');
-
-      // const invite = await github.orgs.addTeamMembership({
       const invite = await api.orgs.addTeamMembership({
         // ID of the @gatsbyjs/maintainers team on GitHub
         id: '1942254',
         username
       });
 
-      console.log('The invite worked!', invite);
+      if (invite.data.state === 'active') {
+        console.log(
+          `@${username} is already a ${invite.data.role} for this team.`
+        );
+      } else {
+        console.log(`We’ve invited @${username} to join this team.`);
+      }
     } catch (err) {
       console.log('Something went wrong.');
       console.log(err);
     }
 
-    console.log(`invite`, invite);
-
     // For new contributors, roll out the welcome wagon!
-    await api.issues.createComment({
-      owner,
-      repo,
-      number,
-      body: comment
-    });
+    // await api.issues.createComment({
+    //   owner,
+    //   repo,
+    //   number,
+    //   body: comment
+    // });
+    markdown(comment);
   }
 );

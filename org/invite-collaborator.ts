@@ -65,13 +65,13 @@ export const inviteCollaborator = wrap(
   [twitter]: https://twitter.com/gatsbyjs
 `;
 
-    const invite = await api.orgs.addTeamMembership({
-      // ID of the @gatsbyjs/maintainers team on GitHub
-      team_id: 1942254,
-      username
-    });
+    // const invite = await api.orgs.addTeamMembership({
+    //   // ID of the @gatsbyjs/maintainers team on GitHub
+    //   team_id: 1942254,
+    //   username
+    // });
 
-    console.log(`invite`, invite);
+    // console.log(`invite`, invite);
 
     // For new contributors, roll out the welcome wagon!
     await danger.github.api.issues.createComment({

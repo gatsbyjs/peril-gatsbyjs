@@ -1,5 +1,5 @@
 import { danger, schedule } from 'danger';
-import octokit from '@octokit/rest';
+import * as octokit from '@octokit/rest';
 
 // The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
 const isJest = typeof jest !== 'undefined';
@@ -71,7 +71,7 @@ export const inviteCollaborator = wrap(
     console.log(`invite`, invite);
 
     // For new contributors, roll out the welcome wagon!
-    await danger.github.api.issues.createComment({
+    await api.issues.createComment({
       owner,
       repo,
       number,

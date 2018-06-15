@@ -19,26 +19,21 @@ export const inviteCollaborator = wrap(
     const repo = gh.thisPR.repo;
     const number = gh.thisPR.number;
 
-    // Details about the pull request.
+    // Details about the collaborator.
     const username = gh.pr.user.login;
-    const isMerged = gh.pr.merged;
 
     // Check whether or not the PR author is a collaborator.
-    const collabCheck = await api.repos.checkCollaborator({
-      owner,
-      repo,
-      username
-    });
-    const isCollaborator = collabCheck.meta.status === '204 No Content';
-
-    console.log('isCollaborator', isCollaborator);
+    // const collabCheck = await api.repos.checkCollaborator({
+    //   owner,
+    //   repo,
+    //   username
+    // });
+    // const isCollaborator = collabCheck.meta.status === '204 No Content';
 
     // If this PR was sent by an existing collaborator or was NOT merged, do nothing.
     // if (!isMerged || isCollaborator) {
     //   return;
     // }
-
-    console.log('We’re doing stuff!');
 
     const comment = `
   Holy buckets, @${username} — we just merged your first PR to Gatsby! 💪💜

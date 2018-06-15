@@ -1,9 +1,8 @@
 # Gatsby's Peril Settings
 
-This is the configuration repo for Peril on the GatsbyJS org. There is a [settings file](peril.settings.json) and org-wide
-dangerfiles which are inside the [org folder](org).
+This is the configuration repo for Peril on the GatsbyJS org. There is a [settings file](peril.settings.json) and org-wide dangerfiles which are inside the [org folder](org).
 
-Here's some links to the key things
+Here're some links to the key things:
 
 - [Peril](https://github.com/danger/peril)
 - [Danger JS](http://danger.systems/js/)
@@ -13,6 +12,7 @@ Here's some links to the key things
 ### What is this project?
 
 - [EmptyBody](org/emptybody.ts): Automatically requests more information from a user who opens a new issue with a blank body.
+- [InviteCollaborator](org/invite-collaborator.ts): Automatically invite all contributors who merge a PR into the GatsbyJS org to become members of the [@gatsbyjs/maintainers](https://github.com/orgs/gatsbyjs/teams/maintainers) team.
 
 ### To Develop
 
@@ -26,14 +26,17 @@ You will need node and yarn installed beforehand. You can get them both by runni
 
 This will give you auto-completion and types for Danger mainly.
 
-### TLDR on this Repo?
+### tl;dr for this Repo?
 
-Peril is Danger running on a web-server, this repo is the configuration for that, currently the dangerfiles in [org](org/)
-run on every issue and pull request for all GatsbyJS Repos.
+Peril is Danger running on a web-server, this repo is the configuration for that, currently the dangerfiles in [org](org/) run on every issue and pull request for all GatsbyJS Repos.
+
+## Acknowledgments
+
+Huge thanks to [@SD10](https://github.com/SD10) for the initial setup help and for additional guidance along the way.
+
+And thanks to [@orta](https://github.com/orta) for creating [Peril](https://github.com/danger/peril). This makes our lives so much easier.
 
 ## TODO
 
-- Credit @\_SD10 for help
-- Verify Heroku account
-- Play with [scheduler](https://github.com/danger/peril/blob/master/source/db/index.ts)
-- Look at auto-labeling issues, autotagging teams
+- [ ] Verify Heroku account
+- [ ] Look at auto-labeling issues, autotagging teams

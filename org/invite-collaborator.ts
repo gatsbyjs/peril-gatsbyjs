@@ -1,4 +1,5 @@
 import { danger, schedule } from 'danger';
+import octokit from '@octokit/rest';
 
 // The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
 const isJest = typeof jest !== 'undefined';
@@ -56,7 +57,12 @@ export const inviteCollaborator = wrap(
   [twitter]: https://twitter.com/gatsbyjs
 `;
 
-    const invite = await api.orgs.addTeamMembership({
+    octokit.authenticate({
+      type: 'token',
+      token: process.env.GITHUB_TOKEN
+    });
+
+    const invite = await octokit.orgs.addTeamMembership({
       // ID of the @gatsbyjs/maintainers team on GitHub
       team_id: 1942254,
       username

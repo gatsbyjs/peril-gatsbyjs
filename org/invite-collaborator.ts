@@ -72,7 +72,7 @@ export const inviteCollaborator = wrap(
       // const invite = await github.orgs.addTeamMembership({
       const invite = await api.orgs.addTeamMembership({
         // ID of the @gatsbyjs/maintainers team on GitHub
-        team_id: 1942254,
+        id: '1942254',
         username
       });
 

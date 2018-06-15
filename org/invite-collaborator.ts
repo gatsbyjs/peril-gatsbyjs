@@ -1,4 +1,4 @@
-import { danger, schedule, markdown } from 'danger';
+import { danger, schedule } from 'danger';
 
 // The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
 const isJest = typeof jest !== 'undefined';
@@ -71,12 +71,11 @@ export const inviteCollaborator = wrap(
     }
 
     // For new contributors, roll out the welcome wagon!
-    // await api.issues.createComment({
-    //   owner,
-    //   repo,
-    //   number,
-    //   body: comment
-    // });
-    markdown(comment);
+    await api.issues.createComment({
+      owner,
+      repo,
+      number,
+      body: comment
+    });
   }
 );

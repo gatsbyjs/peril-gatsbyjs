@@ -3,7 +3,7 @@
     "onlyForOrgMembers": false
   },
   "rules": {
-    "pull_request.closed (issue.merged = true)": [
+    "pull_request.closed": [
       "gatsbyjs/peril-gatsbyjs@org/invite-collaborator.ts"
     ],
     "issues.opened": ["gatsbyjs/peril-gatsbyjs@org/emptybody.ts"]

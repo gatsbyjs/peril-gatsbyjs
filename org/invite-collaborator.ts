@@ -57,17 +57,29 @@ export const inviteCollaborator = wrap(
   [twitter]: https://twitter.com/gatsbyjs
 `;
 
-    const github = new Octokit();
-    github.authenticate({
-      type: 'token',
-      token: process.env.GITHUB_TOKEN
-    });
+    try {
+      const github = new Octokit();
 
-    const invite = await github.orgs.addTeamMembership({
-      // ID of the @gatsbyjs/maintainers team on GitHub
-      team_id: 1942254,
-      username
-    });
+      console.log('We’ve created a new instance of Octokit.');
+
+      github.authenticate({
+        type: 'token',
+        token: process.env.GITHUB_TOKEN
+      });
+
+      console.log('Authentication worked');
+
+      const invite = await github.orgs.addTeamMembership({
+        // ID of the @gatsbyjs/maintainers team on GitHub
+        team_id: 1942254,
+        username
+      });
+
+      console.log('The invite worked!', invite);
+    } catch (err) {
+      console.log('Something went wrong.');
+      console.log(err);
+    }
 
     console.log(`invite`, invite);
 

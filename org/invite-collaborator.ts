@@ -34,9 +34,11 @@ export const inviteCollaborator = wrap(
     console.log('isCollaborator', isCollaborator);
 
     // If this PR was sent by an existing collaborator or was NOT merged, do nothing.
-    if (!isMerged || isCollaborator) {
-      return;
-    }
+    // if (!isMerged || isCollaborator) {
+    //   return;
+    // }
+
+    console.log('We’re doing stuff!');
 
     const comment = `
   Holy buckets, @${username} — we just merged your first PR to Gatsby! 💪💜

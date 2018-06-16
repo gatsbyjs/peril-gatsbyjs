@@ -25,18 +25,23 @@ export const inviteCollaborator = wrap(
     console.log(`Checking if @${username} is already invited to the org.`);
 
     // Check whether or not we’ve already invited this contributor.
-    const inviteCheck = await api.orgs.getTeamMembership({
-      id: '1942254',
-      username
-    });
-    const isInvited = inviteCheck.meta.status !== '404';
+    try {
+      const inviteCheck = await api.orgs.getTeamMembership({
+        id: '1942254',
+        username
+      });
+      const isInvited = inviteCheck.meta.status !== '404';
 
-    // If we’ve already invited them, don’t spam them with more messages.
-    if (isInvited) {
-      console.log(
-        `@${username} has already been invited to this org. Doing nothing.`
-      );
-      return;
+      // If we’ve already invited them, don’t spam them with more messages.
+      if (isInvited) {
+        console.log(
+          `@${username} has already been invited to this org. Doing nothing.`
+        );
+        return;
+      }
+    } catch (err) {
+      console.log('Error checking on invites...');
+      console.log(err);
     }
 
     console.log(

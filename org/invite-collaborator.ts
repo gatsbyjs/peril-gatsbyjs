@@ -22,6 +22,8 @@ export const inviteCollaborator = wrap(
     // Details about the collaborator.
     const username = gh.pr.user.login;
 
+    console.log(`Checking if @${username} is already invited to the org.`);
+
     // Check whether or not we’ve already invited this contributor.
     const inviteCheck = await api.orgs.getTeamMembership({
       id: '1942254',
@@ -31,8 +33,15 @@ export const inviteCollaborator = wrap(
 
     // If we’ve already invited them, don’t spam them with more messages.
     if (isInvited) {
+      console.log(
+        `@${username} has already been invited to this org. Doing nothing.`
+      );
       return;
     }
+
+    console.log(
+      `@${username} isn’t invited yet. That’s unacceptable. Let’s fix it!`
+    );
 
     const comment = `
   Holy buckets, @${username} — we just merged your first PR to Gatsby! 💪💜

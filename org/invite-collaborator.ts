@@ -22,18 +22,17 @@ export const inviteCollaborator = wrap(
     // Details about the collaborator.
     const username = gh.pr.user.login;
 
-    // Check whether or not the PR author is a collaborator.
-    // const collabCheck = await api.repos.checkCollaborator({
-    //   owner,
-    //   repo,
-    //   username
-    // });
-    // const isCollaborator = collabCheck.meta.status === '204 No Content';
+    // Check whether or not we’ve already invited this contributor.
+    const inviteCheck = await api.orgs.getTeamMembership({
+      id: '1942254',
+      username
+    });
+    const isInvited = inviteCheck.meta.status !== '404';
 
-    // If this PR was sent by an existing collaborator or was NOT merged, do nothing.
-    // if (!isMerged || isCollaborator) {
-    //   return;
-    // }
+    // If we’ve already invited them, don’t spam them with more messages.
+    if (isInvited) {
+      return;
+    }
 
     const comment = `
   Holy buckets, @${username} — we just merged your first PR to Gatsby! 💪💜

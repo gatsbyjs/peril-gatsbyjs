@@ -19,9 +19,9 @@ beforeEach(() => {
         }
       },
       api: {
-        repos: {
-          checkCollaborator: () =>
-            Promise.resolve({ meta: { status: '404 Not Found' } })
+        orgs: {
+          getTeamMembership: () =>
+            Promise.resolve({ meta: { status: '404' } })
         },
         issues: {
           createComment: jest.fn()
@@ -41,15 +41,8 @@ describe('a closed pull request', () => {
 
   it('was merged and authored by an existing collaborator', () => {
     dm.danger.github.pr.merged = true;
-    dm.danger.github.api.repos.checkCollaborator = () =>
+    dm.danger.github.api.orgs.getTeamMembership = () =>
       Promise.resolve({ meta: { status: '204 No Content' } });
-    return inviteCollaborator().then(() => {
-      expect(dm.danger.github.api.issues.createComment).not.toBeCalled();
-    });
-  });
-
-  it('was not merged', () => {
-    dm.danger.github.pr.merged = false;
     return inviteCollaborator().then(() => {
       expect(dm.danger.github.api.issues.createComment).not.toBeCalled();
     });

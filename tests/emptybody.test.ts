@@ -9,7 +9,7 @@ beforeEach(() => {
   dm.danger = {
     github: {
       repository: {
-        owner: "Moya"
+        owner: "gatsbyjs"
       },
       issue: {
         user: {

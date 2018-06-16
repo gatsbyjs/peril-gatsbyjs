@@ -2,7 +2,7 @@
 
 This is the configuration repo for Peril on the GatsbyJS org. There is a [settings file](peril.settings.json) and org-wide dangerfiles which are inside the [org folder](org).
 
-Here're some links to the key things:
+Here are links to the relevant tools, docs, and apps we’re using:
 
 - [Peril](https://github.com/danger/peril)
 - [Danger JS](http://danger.systems/js/)

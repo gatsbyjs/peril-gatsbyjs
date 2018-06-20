@@ -40,13 +40,11 @@ export const inviteCollaborator = wrap(
         return;
       }
     } catch (err) {
-      console.log('Error checking on invites...');
-      console.log(err);
+      // If the user hasn’t been invited, the invite check throws an error.
+      console.log(
+        `@${username} isn’t invited yet. Unacceptable. Let’s fix it!`
+      );
     }
-
-    console.log(
-      `@${username} isn’t invited yet. That’s unacceptable. Let’s fix it!`
-    );
 
     const comment = `
   Holy buckets, @${username} — we just merged your first PR to Gatsby! 💪💜
@@ -56,11 +54,11 @@ export const inviteCollaborator = wrap(
   1.  **We just invited you to join our team of maintainers on GitHub.** You’ll receive an email shortly asking you to confirm. By joining the team, you’ll be able to label issues, review pull requests, and merge approved pull requests.
   2.  **We’d like to send you some Gatsby swag.** As a token of our appreciation, you can go to the [Gatsby Swag Store][store] and log in with your GitHub account to get a coupon code good for one free piece of swag. (Currently we’ve got a couple t-shirts available, plus some socks that are really razzing our berries right now.)
   
-  If there’s anything we can do to help, please don’t hesitate to reach out to us: just mention @gatsbyjs/inkteam on GitHub or tweet at [@gatsbyjs][twitter] and we’ll come a-runnin’.
+  If there’s anything we can do to help, please don’t hesitate to reach out to us: tweet at [@gatsbyjs][twitter] and we’ll come a-runnin’.
 
   Thanks again!
 
-  [store]: https://store.gatsbyjs.com
+  [store]: https://store.gatsbyjs.org
   [twitter]: https://twitter.com/gatsbyjs
 `;
 

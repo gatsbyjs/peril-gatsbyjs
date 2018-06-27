@@ -1,6 +1,6 @@
 # Gatsby's Peril Settings
 
-This is the configuration repo for Peril on the GatsbyJS org. There is a [settings file](peril.settings.json) and org-wide dangerfiles which are inside the [org folder](org).
+This is the configuration repo for Peril on the GatsbyJS org. There’s a [settings file](peril.settings.json) and org-wide dangerfiles which are inside the [org folder](org).
 
 ## tl;dr for this repo
 

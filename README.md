@@ -2,6 +2,12 @@
 
 This is the configuration repo for Peril on the GatsbyJS org. There is a [settings file](peril.settings.json) and org-wide dangerfiles which are inside the [org folder](org).
 
+## tl;dr for this repo
+
+Peril is Danger running on a web-server, this repo is the configuration for that, currently the dangerfiles in [org](org/) run on every issue and pull request for all GatsbyJS Repos.
+
+## How it works
+
 Here are links to the relevant tools, docs, and apps we’re using:
 
 - [Peril](https://github.com/danger/peril)
@@ -25,10 +31,6 @@ code .
 You will need node and yarn installed beforehand. You can get them both by running `brew install yarn`.
 
 This will give you auto-completion and types for Danger mainly.
-
-### tl;dr for this Repo?
-
-Peril is Danger running on a web-server, this repo is the configuration for that, currently the dangerfiles in [org](org/) run on every issue and pull request for all GatsbyJS Repos.
 
 ## Acknowledgments
 

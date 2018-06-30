@@ -4,7 +4,7 @@ This is the configuration repo for Peril on the GatsbyJS org. There’s a [setti
 
 ## tl;dr for this repo
 
-Peril is Danger running on a web-server, this repo is the configuration for that, currently the dangerfiles in [org](org/) run on every issue and pull request for all GatsbyJS Repos.
+Peril is Danger running on a web-server and this repo is the configuration for that. Currently the dangerfiles in [org](org/) run on every issue and pull request for all GatsbyJS Repos.
 
 ## How it works
 

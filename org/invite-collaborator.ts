@@ -47,7 +47,7 @@ export const inviteCollaborator = wrap(
     }
 
     const comment = `
-  Holy buckets, @${username} — we just merged your first PR to Gatsby! 💪💜
+  Holy buckets, @${username} — we just merged your PR to Gatsby! 💪💜
 
   Gatsby is built by awesome people like you. Let us say “thanks” in two ways:
 

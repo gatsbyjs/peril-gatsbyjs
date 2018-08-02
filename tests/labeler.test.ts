@@ -76,7 +76,7 @@ describe('a new issue', () => {
   });
 
   it('not recognised', () => {
-    dm.danger.github.issue.title = 'Supporting HSTS and HSTS preloading';
+    dm.danger.github.issue.title = 'Supporting HSTS and how to HSTS preloading';
     return labeler().then(() => {
       expect(dm.danger.github.api.issues.addLabels).not.toBeCalled()
     })

@@ -32,9 +32,9 @@ export const labeler = wrap(
       return words.has(firstWord.toLowerCase());
     };
 
-      const titleEndsInQuestionMark = (): boolean => {
-          return title.slice(-1) == "?";
-      };
+    const titleEndsInQuestionMark = (): boolean => {
+      return title.slice(-1) == "?";
+    };
 
     const addLabelIfDoesNotExist = (name: string) => {
       const labels = danger.github.issue.labels;
@@ -59,7 +59,7 @@ export const labeler = wrap(
       addLabelIfDoesNotExist('type: question or discussion');
     }
 
-    // label: documentation
+    // label: type: documentation
     const documentationWords: Set<string> = new Set([
       'documentation',
       'document',

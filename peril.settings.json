@@ -7,9 +7,12 @@
       "gatsbyjs/peril-gatsbyjs@org/invite-collaborator.ts"
     ],
     "issues.opened": [
-      "gatsbyjs/peril-gatsbyjs@org/emptybody.ts",
-      "gatsbyjs/peril-gatsbyjs@org/labeler.ts"
+      "gatsbyjs/peril-gatsbyjs@org/emptybody.ts"
     ]
   },
-  "repos": {}
+  "repos": {
+    "gatsbyjs/peril-gatsbyjs": {
+      "issues.opened": "gatsbyjs/peril-gatsbyjs@org/labeler.ts"
+    }
+  }
 }

@@ -12,7 +12,7 @@
   },
   "repos": {
     "gatsbyjs/peril-gatsbyjs": {
-      "issues.opened": "gatsbyjs/peril-gatsbyjs@org/labeler.ts"
+      "issues.opened": "org/labeler.ts"
     }
   }
 }

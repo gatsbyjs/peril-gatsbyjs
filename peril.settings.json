@@ -1,11 +1,11 @@
 {
-    "settings": {
-        "onlyForOrgMembers": false
-    },
     "rules": {
-        "pull_request.closed (pull_request.merged == true)": [
-            "gatsbyjs/peril-gatsbyjs@org/invite-collaborator.ts"
-        ],
-        "issues.opened": ["gatsbyjs/peril-gatsbyjs@org/emptybody.ts"]
+        "pull_request.closed (pull_request.merged == true)": "gatsbyjs/peril-gatsbyjs@org/invite-collaborator.ts",
+        "issues.opened": "gatsbyjs/peril-gatsbyjs@org/emptybody.ts"
+    },
+    "repos": {
+        "gatsbyjs/peril-gatsbyjs": {
+            "issues.opened": ["org/labeler.ts"]
+        }
     }
 }

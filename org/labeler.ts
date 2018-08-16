@@ -13,6 +13,7 @@ export const labeler = wrap(
   async () => {
     console.log('-'.repeat(80));
     console.log('This is the labeler task');
+    console.log(`SKIP_CHECKS_SUPPORT: ${process.env.SKIP_CHECKS_SUPPORT}`);
     console.log('-'.repeat(80));
     // const gh = danger.github as any;
     // const repo = gh.repository;

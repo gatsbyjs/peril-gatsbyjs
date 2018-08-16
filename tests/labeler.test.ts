@@ -34,7 +34,7 @@ describe('a new issue', () => {
         repo: 'gatsby',
         owner: 'gatsbyjs',
         number: 100,
-        labels: ['type: question or discussion']
+        labels: ['question', 'type: question or discussion']
       })
     });
   });
@@ -46,7 +46,7 @@ describe('a new issue', () => {
         repo: 'gatsby',
         owner: 'gatsbyjs',
         number: 100,
-        labels: ['type: question or discussion']
+        labels: ['question', 'type: question or discussion']
       })
     });
   });

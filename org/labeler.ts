@@ -15,6 +15,7 @@ export const labeler = wrap(
     const repo = gh.repository;
     const issue = gh.issue;
     const title = issue.title;
+    console.log(`Incoming issue data: ${JSON.stringify(issue)}`);
     const titleWords = title.split(" ") as string[];
 
     let labelsToAdd: string[] = [];
@@ -55,7 +56,14 @@ export const labeler = wrap(
       'which',
     ]);
 
+
     if (titleEndsInQuestionMark() || titleStartsWithAny(questionWords)) {
+      console.log('discussion related words found label without spaces and colon');
+      addLabelIfDoesNotExist('question')
+    }
+
+    if (titleEndsInQuestionMark() || titleStartsWithAny(questionWords)) {
+      console.log('discussion related words found');
       addLabelIfDoesNotExist('type: question or discussion');
     }
 
@@ -71,10 +79,12 @@ export const labeler = wrap(
     ]);
 
     if (titleIncludesAny(documentationWords)) {
+      console.log('documentation related words found');
       addLabelIfDoesNotExist('type: documentation');
     }
 
     if (labelsToAdd.length > 0) {
+      console.log(`Labels to be added: ${labelsToAdd.join(',')}`);
       await danger.github.api.issues.addLabels({
         owner: repo.owner.login,
         repo: repo.name,

@@ -1,14 +1,7 @@
-import { danger, schedule } from 'danger';
+import { danger } from 'danger';
+import schedule from '../utils/testable-schedule';
 
-// The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
-const isJest = typeof jest !== 'undefined';
-// Returns the promise itself, for testing.
-const _test = (reason: string, promise: Promise<any>) => promise;
-// Schedules the promise for execution via Danger.
-const _run = (reason: string, promise: Promise<any>) => schedule(promise);
-const wrap: any = isJest ? _test : _run;
-
-export const inviteCollaborator = wrap(
+export const inviteCollaborator = schedule(
   'Invite the PR author to join as a collaborator',
   async () => {
     const gh = danger.github as any;

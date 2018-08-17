@@ -1,14 +1,63 @@
-import { danger, schedule } from 'danger';
+import { danger } from 'danger';
+import schedule from '../utils/testable-schedule';
 
-// The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
-const isJest = typeof jest !== 'undefined';
-// Returns the promise itself, for testing.
-const _test = (reason: string, promise: Promise<any>) => promise;
-// Schedules the promise for execution via Danger.
-const _run = (reason: string, promise: Promise<any>) => schedule(promise);
-const wrap: any = isJest ? _test : _run;
+const questionWords: Set<string> = new Set([
+  'how',
+  'who',
+  'what',
+  'where',
+  'when',
+  'why',
+  'will',
+  'which'
+]);
 
-export const labeler = wrap(
+const documentationWords: Set<string> = new Set([
+  'documentation',
+  'document',
+  'docs',
+  'doc',
+  'readme',
+  'changelog',
+  'tutorial'
+]);
+
+const endsWith = (character: string, sentence: string): boolean =>
+  sentence.slice(-1) === character;
+
+const matchKeyword = (
+  keywords: Set<string>,
+  sentence: string,
+  firstOnly: boolean = false
+): boolean => {
+  /*
+   * We need to turn the title into a parseable array of words. To do this, we:
+   * 1. Remove any character that’s not a letter or space
+   * 2. Split the sentence on spaces to create an array of words, and
+   * 3. Get the first word if `firstOnly` is `true`, or else the whole array
+   */
+  const words = sentence
+    .replace(/\W /g, '')
+    .split(' ')
+    .slice(0, firstOnly ? 1 : Infinity) as string[];
+
+  console.log(
+    `Checking if ${JSON.stringify(
+      words.join(', ')
+    )} appears in ${JSON.stringify(Array.from(keywords).join(', '))}`
+  );
+
+  // Check if any of the words matches our set of keywords.
+  return words.some((word: string) => keywords.has(word.toLowerCase()));
+};
+
+const validateLabels = (
+  validLabels: GitHubIssueLabel[],
+  labels: string[]
+): string[] =>
+  labels.filter(label => validLabels.map(i => i.name).includes(label));
+
+export const labeler = schedule(
   'Label newly created issue based on keywords',
   async () => {
     console.log('-'.repeat(80));
@@ -17,80 +66,34 @@ export const labeler = wrap(
     const repo = gh.repository;
     const issue = gh.issue;
     const title = issue.title;
-    console.log(`Incoming issue data: ${JSON.stringify(issue)}`);
-    const titleWords = title.split(' ') as string[];
+    const repoLabels = danger.github.issue.labels;
+    console.log(`Incoming issue #${issue.number} “${title}”`);
+    console.log(`Repo labels: ${repoLabels.join(', ')}`);
 
-    let labelsToAdd: string[] = [];
+    let labels: string[] = [];
 
-    const titleIncludesAny = (words: Set<string>): boolean => {
-      return (
-        titleWords.filter(titleWord => words.has(titleWord.toLowerCase()))
-          .length > 0
-      );
-    };
+    // const addLabelIfDoesNotExist = (name: string) => {
+    //   const labels = danger.github.issue.labels;
+    //   const hasLabel = labels.map(i => i.name).includes(name);
+    //   if (!hasLabel) {
+    //     labelsToAdd.push(name);
+    //   }
+    // };
 
-    const titleStartsWithAny = (words: Set<string>): boolean => {
-      if (titleWords.length == 0) {
-        return false;
-      }
-
-      const firstWord = titleWords[0];
-      return words.has(firstWord.toLowerCase());
-    };
-
-    const titleEndsInQuestionMark = (): boolean => {
-      return title.slice(-1) == '?';
-    };
-
-    const addLabelIfDoesNotExist = (name: string) => {
-      const labels = danger.github.issue.labels;
-      const hasLabel = labels.map(i => i.name).includes(name);
-      if (!hasLabel) {
-        labelsToAdd.push(name);
-      }
-    };
-
-    // type: question or discussion
-    const questionWords: Set<string> = new Set([
-      'how',
-      'who',
-      'what',
-      'where',
-      'when',
-      'why',
-      'which'
-    ]);
-
-    if (titleEndsInQuestionMark() || titleStartsWithAny(questionWords)) {
-      console.log(
-        'discussion related words found label without spaces and colon'
-      );
-      addLabelIfDoesNotExist('question');
+    if (endsWith('?', title) || matchKeyword(questionWords, title, true)) {
+      console.log('This issue contains question words.');
+      labels.push('question');
     }
 
-    if (titleEndsInQuestionMark() || titleStartsWithAny(questionWords)) {
-      console.log('discussion related words found');
-      addLabelIfDoesNotExist('type: question or discussion');
+    if (matchKeyword(documentationWords, title)) {
+      console.log('This issue contains documentation words');
+      labels.push('type: documentation');
     }
 
-    // label: type: documentation
-    const documentationWords: Set<string> = new Set([
-      'documentation',
-      'document',
-      'docs',
-      'doc',
-      'readme',
-      'changelog',
-      'tutorial'
-    ]);
-
-    if (titleIncludesAny(documentationWords)) {
-      console.log('documentation related words found');
-      addLabelIfDoesNotExist('type: documentation');
-    }
+    const labelsToAdd = validateLabels(repoLabels, labels);
+    console.log(`Labels to be added: ${labels.join(',')}`);
 
     if (labelsToAdd.length > 0) {
-      console.log(`Labels to be added: ${labelsToAdd.join(',')}`);
       await danger.github.api.issues.addLabels({
         owner: repo.owner.login,
         repo: repo.name,

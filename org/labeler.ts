@@ -51,10 +51,7 @@ const matchKeyword = (
   return words.some((word: string) => keywords.has(word.toLowerCase()));
 };
 
-const validateLabels = (
-  validLabels: GitHubIssueLabel[],
-  labels: string[]
-): string[] =>
+const validateLabels = (validLabels, labels: string[]): string[] =>
   labels.filter(label => validLabels.map(i => i.name).includes(label));
 
 export const labeler = schedule(

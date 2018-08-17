@@ -37,7 +37,7 @@ const matchKeyword = (
    * 3. Get the first word if `firstOnly` is `true`, or else the whole array
    */
   const words = sentence
-    .replace(/\W /g, '')
+    .replace(/\W /g, ' ')
     .split(' ')
     .slice(0, firstOnly ? 1 : Infinity) as string[];
 
@@ -60,45 +60,37 @@ const validateLabels = (
 export const labeler = schedule(
   'Label newly created issue based on keywords',
   async () => {
-    console.log('-'.repeat(80));
-    console.log('This is the labeler task');
     const gh = danger.github as any;
     const repo = gh.repository;
     const issue = gh.issue;
     const title = issue.title;
-    const repoLabels = danger.github.issue.labels;
+    const currentLabels = danger.github.issue.labels.map(i => i.name);
+
+    console.log('-'.repeat(80));
     console.log(`Incoming issue #${issue.number} “${title}”`);
-    console.log(`Repo labels: ${repoLabels.join(', ')}`);
 
-    let labels: string[] = [];
-
-    // const addLabelIfDoesNotExist = (name: string) => {
-    //   const labels = danger.github.issue.labels;
-    //   const hasLabel = labels.map(i => i.name).includes(name);
-    //   if (!hasLabel) {
-    //     labelsToAdd.push(name);
-    //   }
-    // };
+    let labels: Set<string> = new Set(currentLabels);
 
     if (endsWith('?', title) || matchKeyword(questionWords, title, true)) {
       console.log('This issue contains question words.');
-      labels.push('question');
+      labels.add('question').add('type: question or discussion');
     }
 
     if (matchKeyword(documentationWords, title)) {
       console.log('This issue contains documentation words');
-      labels.push('type: documentation');
+      labels.add('type: documentation');
     }
 
-    const labelsToAdd = validateLabels(repoLabels, labels);
-    console.log(`Labels to be added: ${labels.join(',')}`);
+    console.log(
+      `Labels to be added: ${JSON.stringify(Array.from(labels).join(','))}`
+    );
 
-    if (labelsToAdd.length > 0) {
+    if (labels.size > 0) {
       await danger.github.api.issues.addLabels({
         owner: repo.owner.login,
         repo: repo.name,
         number: issue.number,
-        labels: labelsToAdd
+        labels: Array.from(labels)
       });
     }
     console.log('-'.repeat(80));

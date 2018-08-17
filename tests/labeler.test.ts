@@ -10,7 +10,7 @@ beforeEach(() => {
       repository: {
         name: 'gatsby',
         owner: {
-          login: "gatsbyjs"
+          login: 'gatsbyjs'
         }
       },
       issue: {
@@ -28,26 +28,41 @@ beforeEach(() => {
 
 describe('a new issue', () => {
   it('with question mark in a title', () => {
-    dm.danger.github.issue.title = 'Help - Has anyone hosted a gatsby.js site on Platform.sh?';
+    dm.danger.github.issue.title =
+      'Help - Has anyone hosted a gatsby.js site on Platform.sh?';
     return labeler().then(() => {
       expect(dm.danger.github.api.issues.addLabels).toBeCalledWith({
         repo: 'gatsby',
         owner: 'gatsbyjs',
         number: 100,
         labels: ['question', 'type: question or discussion']
-      })
+      });
+    });
+  });
+
+  it('with existing labels', () => {
+    dm.danger.github.issue.title = 'How are labels handled?';
+    dm.danger.github.issue.labels = [{ name: 'question' }];
+    return labeler().then(() => {
+      expect(dm.danger.github.api.issues.addLabels).toBeCalledWith({
+        repo: 'gatsby',
+        owner: 'gatsbyjs',
+        number: 100,
+        labels: ['question', 'type: question or discussion']
+      });
     });
   });
 
   it('starting with how', () => {
-    dm.danger.github.issue.title = 'How do you justify Gatsby’s bundle size to clients';
+    dm.danger.github.issue.title =
+      'How do you justify Gatsby’s bundle size to clients';
     return labeler().then(() => {
       expect(dm.danger.github.api.issues.addLabels).toBeCalledWith({
         repo: 'gatsby',
         owner: 'gatsbyjs',
         number: 100,
         labels: ['question', 'type: question or discussion']
-      })
+      });
     });
   });
 
@@ -59,7 +74,7 @@ describe('a new issue', () => {
         owner: 'gatsbyjs',
         number: 100,
         labels: ['type: documentation']
-      })
+      });
     });
   });
 
@@ -71,14 +86,14 @@ describe('a new issue', () => {
         owner: 'gatsbyjs',
         number: 100,
         labels: ['type: documentation']
-      })
+      });
     });
   });
 
   it('not recognised', () => {
     dm.danger.github.issue.title = 'Supporting HSTS and how to HSTS preloading';
     return labeler().then(() => {
-      expect(dm.danger.github.api.issues.addLabels).not.toBeCalled()
-    })
+      expect(dm.danger.github.api.issues.addLabels).not.toBeCalled();
+    });
   });
 });

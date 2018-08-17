@@ -2,7 +2,7 @@ jest.mock('danger', () => jest.fn());
 import * as danger from 'danger';
 const dm = danger as any;
 
-import { labeler } from '../org/labeler';
+import { labeler } from '../rules/labeler';
 
 beforeEach(() => {
   dm.danger = {

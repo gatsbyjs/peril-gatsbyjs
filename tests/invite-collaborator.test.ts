@@ -2,7 +2,7 @@ jest.mock('danger', () => jest.fn());
 import * as danger from 'danger';
 const dm = danger as any;
 
-import { inviteCollaborator } from '../org/invite-collaborator';
+import { inviteCollaborator } from '../rules/invite-collaborator';
 import { notDeepEqual } from 'assert';
 
 beforeEach(() => {
@@ -20,8 +20,7 @@ beforeEach(() => {
       },
       api: {
         orgs: {
-          getTeamMembership: () =>
-            Promise.resolve({ meta: { status: '404' } })
+          getTeamMembership: () => Promise.resolve({ meta: { status: '404' } })
         },
         issues: {
           createComment: jest.fn()

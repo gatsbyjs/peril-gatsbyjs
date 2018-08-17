@@ -1,5 +1,6 @@
 {
+    "settings": {},
     "rules": {
-        "issues.opened": ["gatsbyjs/peril-gatsbyjs@org/labeler.ts"]
+        "issues.opened": ["gatsbyjs/peril-gatsbyjs@rules/labeler.ts"]
     }
 }

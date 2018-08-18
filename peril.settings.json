@@ -1,12 +1,12 @@
 {
     "settings": {},
     "rules": {
+        "issues.opened": ["gatsbyjs/peril-gatsbyjs@rules/labeler.ts"],
         "issues.opened, pull_request.opened": [
             "gatsbyjs/peril-gatsbyjs@rules/emptybody.ts"
         ],
         "pull_request.closed (pull_request.merged == true)": [
             "gatsbyjs/peril-gatsbyjs@rules/invite-collaborator.ts"
-        ],
-        "issues.opened": ["gatsbyjs/peril-gatsbyjs@rules/labeler.ts"]
+        ]
     }
 }

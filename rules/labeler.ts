@@ -44,12 +44,6 @@ const matchKeyword = (
     .split(' ')
     .slice(0, firstOnly ? 1 : Infinity) as string[];
 
-  console.log(
-    `Checking if ${JSON.stringify(
-      words.join(', ')
-    )} appears in ${JSON.stringify(Array.from(keywords).join(', '))}`
-  );
-
   // Check if any of the words matches our set of keywords.
   return words.some((word: string) => keywords.has(word.toLowerCase()));
 };
@@ -63,24 +57,15 @@ export const labeler = testableSchedule(
     const title = issue.title;
     const currentLabels = danger.github.issue.labels.map(i => i.name);
 
-    console.log('-'.repeat(80));
-    console.log(`Incoming issue #${issue.number} “${title}”`);
-
     let labels: Set<string> = new Set(currentLabels);
 
     if (endsWith('?', title) || matchKeyword(questionWords, title, true)) {
-      console.log('This issue contains question words.');
       labels.add('question').add('type: question or discussion');
     }
 
     if (matchKeyword(documentationWords, title)) {
-      console.log('This issue contains documentation words');
       labels.add('type: documentation');
     }
-
-    console.log(
-      `Labels to be added: ${JSON.stringify(Array.from(labels).join(','))}`
-    );
 
     if (labels.size > 0) {
       await danger.github.api.issues.addLabels({
@@ -90,6 +75,5 @@ export const labeler = testableSchedule(
         labels: Array.from(labels)
       });
     }
-    console.log('-'.repeat(80));
   }
 );

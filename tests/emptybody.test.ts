@@ -15,33 +15,30 @@ beforeEach(() => {
         user: {
           login: 'someUser'
         }
-      },
-      api: {
-        issues: {
-          createComment: jest.fn()
-        }
       }
     }
   };
+
+  dm.markdown = jest.fn();
 });
 
 describe('a new issue', () => {
-  it('has no contnent in the body', () => {
+  it('has no content in the body', () => {
     dm.danger.github.issue.body = '';
     return emptybody().then(() => {
-      expect(dm.danger.github.api.issues.createComment).toBeCalled();
+      expect(dm.markdown).toBeCalled();
     });
   });
   it('only contains whitespace in body', () => {
     dm.danger.github.issue.body = '\n';
     return emptybody().then(() => {
-      expect(dm.danger.github.api.issues.createComment).toBeCalled();
+      expect(dm.markdown).toBeCalled();
     });
   });
   it('has a body with content', () => {
     dm.danger.github.issue.body = 'Moya is awesome';
     return emptybody().then(() => {
-      expect(dm.danger.github.api.issues.createComment).not.toBeCalled();
+      expect(dm.markdown).not.toBeCalled();
     });
   });
 });

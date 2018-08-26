@@ -27,5 +27,8 @@
       "jsx",
       "json"
     ]
+  },
+  "dependencies": {
+    "@slack/client": "^4.5.0"
   }
 }

@@ -1,5 +1,7 @@
 import { danger, schedule } from 'danger';
 
+console.log('labeler was loaded.');
+
 // Make schedule testable with Jest. Inspiration: https://git.io/fNh6i
 const testableSchedule = (reason: string, action: any) =>
   typeof jest !== 'undefined' ? action : schedule(action);
@@ -51,6 +53,8 @@ const matchKeyword = (
 export const labeler = testableSchedule(
   'Label newly created issue based on keywords',
   async () => {
+    console.log('labeler was run');
+
     const gh = danger.github as any;
     const repo = gh.repository;
     const issue = gh.issue;

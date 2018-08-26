@@ -1,4 +1,4 @@
-import { danger, schedule } from 'danger';
+import { danger, markdown, schedule } from 'danger';
 
 // Make schedule testable with Jest. Inspiration: https://git.io/fNh6i
 const testableSchedule = (reason: string, action: any) =>
@@ -28,12 +28,7 @@ Please fill in this field with more information to help the maintainers resolve 
     `;
 
     if (body.length == 0) {
-      await danger.github.api.issues.createComment({
-        owner: repo.owner.login,
-        repo: repo.name,
-        number: issue.number,
-        body: comment
-      });
+      markdown(comment);
     }
   }
 );

@@ -1,4 +1,4 @@
-import { danger, markdown, schedule } from 'danger';
+import { danger, schedule } from 'danger';
 
 // Make schedule testable with Jest. Inspiration: https://git.io/fNh6i
 const testableSchedule = (reason: string, action: any) =>
@@ -58,8 +58,6 @@ export const labeler = testableSchedule(
     const currentLabels = danger.github.issue.labels.map(i => i.name);
 
     let labels: Set<string> = new Set(currentLabels);
-
-    markdown('This is a test. @jlengstorf is pushing buttons; disregard.');
 
     if (endsWith('?', title) || matchKeyword(questionWords, title, true)) {
       labels.add('question').add('type: question or discussion');

@@ -6,13 +6,16 @@
         "modules": ["@slack/client"]
     },
     "rules": {
-        "issues.opened": ["rules/emptybody.ts", "rules/labeler.ts"],
-        "pull_request.opened": ["rules/emptybody.ts"],
+        "issues.opened": ["rules/emptybody.js", "rules/labeler.ts"],
+        "pull_request.opened": ["rules/emptybody.js"],
         "pull_request.closed (pull_request.merged == true)": [
             "rules/invite-collaborator.ts"
         ]
     },
+    "tasks": {
+        "slacktest": "rules/slacktest.js"
+    },
     "scheduler": {
-        "30 * * * * *": "rules/slacktest.ts"
+        "30 * * * * *": "slacktest"
     }
 }

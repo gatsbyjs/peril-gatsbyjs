@@ -1,7 +1,5 @@
 import { danger } from 'danger';
 
-console.log('labeler was loaded.');
-
 const questionWords: Set<string> = new Set([
   'how',
   'who',
@@ -47,8 +45,6 @@ const matchKeyword = (
 };
 
 export const labeler = async () => {
-  console.log('labeler was run');
-
   const gh = danger.github as any;
   const repo = gh.repository;
   const issue = gh.issue;

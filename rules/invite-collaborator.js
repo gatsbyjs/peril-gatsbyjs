@@ -1,8 +1,8 @@
 import { danger } from 'danger';
 
 export const inviteCollaborator = async () => {
-  const gh = danger.github as any;
-  const api = danger.github.api;
+  const gh = danger.github;
+  const api = gh.api;
 
   // Details about the repo.
   const owner = gh.thisPR.owner;
@@ -12,15 +12,13 @@ export const inviteCollaborator = async () => {
   // Details about the collaborator.
   const username = gh.pr.user.login;
 
-  console.log(`Checking if @${username} is already invited to the org.`);
-
   // Check whether or not we’ve already invited this contributor.
   try {
     const inviteCheck = await api.orgs.getTeamMembership({
-      id: '1942254',
+      team_id: '1942254',
       username
     });
-    const isInvited = inviteCheck.meta.status !== '404';
+    const isInvited = inviteCheck.headers.status !== '404';
 
     // If we’ve already invited them, don’t spam them with more messages.
     if (isInvited) {
@@ -29,9 +27,8 @@ export const inviteCollaborator = async () => {
       );
       return;
     }
-  } catch (err) {
+  } catch (_) {
     // If the user hasn’t been invited, the invite check throws an error.
-    console.log(`@${username} isn’t invited yet. Unacceptable. Let’s fix it!`);
   }
 
   const comment = `
@@ -53,7 +50,7 @@ export const inviteCollaborator = async () => {
   try {
     const invite = await api.orgs.addTeamMembership({
       // ID of the @gatsbyjs/maintainers team on GitHub
-      id: '1942254',
+      team_id: '1942254',
       username
     });
 

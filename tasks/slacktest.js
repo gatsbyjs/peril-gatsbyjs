@@ -1,4 +1,4 @@
-/* global peril:false */
+import { peril } from 'danger';
 import { IncomingWebhook } from '@slack/client';
 
 console.log('slacktest was loaded');

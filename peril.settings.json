@@ -13,9 +13,9 @@
         ]
     },
     "tasks": {
-        "slacktest": "rules/slacktest.js"
+        "slack-test": "gatsbyjs/peril-gatsbyjs@tasks/slacktest.js"
     },
     "scheduler": {
-        "30 * * * * *": "slacktest"
+        "30 * * * * ?": "slack-test"
     }
 }

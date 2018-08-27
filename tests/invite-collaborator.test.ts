@@ -3,7 +3,6 @@ import * as danger from 'danger';
 const dm = danger as any;
 
 import { inviteCollaborator } from '../rules/invite-collaborator';
-import { notDeepEqual } from 'assert';
 
 beforeEach(() => {
   dm.danger = {
@@ -20,7 +19,10 @@ beforeEach(() => {
       },
       api: {
         orgs: {
-          getTeamMembership: () => Promise.resolve({ meta: { status: '404' } })
+          getTeamMembership: () => Promise.resolve({ meta: { status: '404' } }),
+          addTeamMembership: jest.fn(() =>
+            Promise.resolve({ data: { state: 'pending' } })
+          )
         },
         issues: {
           createComment: jest.fn()
@@ -35,6 +37,7 @@ describe('a closed pull request', () => {
     dm.danger.github.pr.merged = true;
     return inviteCollaborator().then(() => {
       expect(dm.danger.github.api.issues.createComment).toBeCalled();
+      expect(dm.danger.github.api.orgs.addTeamMembership).toBeCalled();
     });
   });
 

@@ -1,48 +1,40 @@
-import { danger, schedule } from 'danger';
+import { danger } from 'danger';
 
-// Make schedule testable with Jest. Inspiration: https://git.io/fNh6i
-const testableSchedule = (reason: string, action: any) =>
-  typeof jest !== 'undefined' ? action : schedule(action);
+export const inviteCollaborator = async () => {
+  const gh = danger.github as any;
+  const api = danger.github.api;
 
-export const inviteCollaborator = testableSchedule(
-  'Invite the PR author to join as a collaborator',
-  async () => {
-    const gh = danger.github as any;
-    const api = danger.github.api;
+  // Details about the repo.
+  const owner = gh.thisPR.owner;
+  const repo = gh.thisPR.repo;
+  const number = gh.thisPR.number;
 
-    // Details about the repo.
-    const owner = gh.thisPR.owner;
-    const repo = gh.thisPR.repo;
-    const number = gh.thisPR.number;
+  // Details about the collaborator.
+  const username = gh.pr.user.login;
 
-    // Details about the collaborator.
-    const username = gh.pr.user.login;
+  console.log(`Checking if @${username} is already invited to the org.`);
 
-    console.log(`Checking if @${username} is already invited to the org.`);
+  // Check whether or not we’ve already invited this contributor.
+  try {
+    const inviteCheck = await api.orgs.getTeamMembership({
+      id: '1942254',
+      username
+    });
+    const isInvited = inviteCheck.meta.status !== '404';
 
-    // Check whether or not we’ve already invited this contributor.
-    try {
-      const inviteCheck = await api.orgs.getTeamMembership({
-        id: '1942254',
-        username
-      });
-      const isInvited = inviteCheck.meta.status !== '404';
-
-      // If we’ve already invited them, don’t spam them with more messages.
-      if (isInvited) {
-        console.log(
-          `@${username} has already been invited to this org. Doing nothing.`
-        );
-        return;
-      }
-    } catch (err) {
-      // If the user hasn’t been invited, the invite check throws an error.
+    // If we’ve already invited them, don’t spam them with more messages.
+    if (isInvited) {
       console.log(
-        `@${username} isn’t invited yet. Unacceptable. Let’s fix it!`
+        `@${username} has already been invited to this org. Doing nothing.`
       );
+      return;
     }
+  } catch (err) {
+    // If the user hasn’t been invited, the invite check throws an error.
+    console.log(`@${username} isn’t invited yet. Unacceptable. Let’s fix it!`);
+  }
 
-    const comment = `
+  const comment = `
   Holy buckets, @${username} — we just merged your PR to Gatsby! 💪💜
 
   Gatsby is built by awesome people like you. Let us say “thanks” in two ways:
@@ -58,31 +50,34 @@ export const inviteCollaborator = testableSchedule(
   [twitter]: https://twitter.com/gatsbyjs
 `;
 
-    try {
-      const invite = await api.orgs.addTeamMembership({
-        // ID of the @gatsbyjs/maintainers team on GitHub
-        id: '1942254',
-        username
-      });
-
-      if (invite.data.state === 'active') {
-        console.log(
-          `@${username} is already a ${invite.data.role} for this team.`
-        );
-      } else {
-        console.log(`We’ve invited @${username} to join this team.`);
-      }
-    } catch (err) {
-      console.log('Something went wrong.');
-      console.log(err);
-    }
-
-    // For new contributors, roll out the welcome wagon!
-    await api.issues.createComment({
-      owner,
-      repo,
-      number,
-      body: comment
+  try {
+    const invite = await api.orgs.addTeamMembership({
+      // ID of the @gatsbyjs/maintainers team on GitHub
+      id: '1942254',
+      username
     });
+
+    if (invite.data.state === 'active') {
+      console.log(
+        `@${username} is already a ${invite.data.role} for this team.`
+      );
+    } else {
+      console.log(`We’ve invited @${username} to join this team.`);
+    }
+  } catch (err) {
+    console.log('Something went wrong.');
+    console.log(err);
   }
-);
+
+  // For new contributors, roll out the welcome wagon!
+  await api.issues.createComment({
+    owner,
+    repo,
+    number,
+    body: comment
+  });
+};
+
+export default async () => {
+  await inviteCollaborator();
+};

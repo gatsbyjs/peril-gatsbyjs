@@ -38,7 +38,6 @@ Huge thanks to [@SD10](https://github.com/SD10) for the initial setup help and f
 
 And thanks to [@orta](https://github.com/orta) for creating [Peril](https://github.com/danger/peril). This makes our lives so much easier.
 
-## TODO
+## Roadmap
 
-- [ ] Verify Heroku account
-- [ ] Look at auto-labeling issues, autotagging teams
+See [this epic](https://github.com/gatsbyjs/gatsby/issues/6728) for additional work planned in this repo. (Works best with the [ZenHub extension](https://www.zenhub.com/extension).)

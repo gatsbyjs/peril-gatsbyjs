@@ -3,7 +3,6 @@ import * as danger from 'danger';
 const dm = danger as any;
 
 import { emptybody } from '../rules/emptybody';
-import { notDeepEqual } from 'assert';
 
 beforeEach(() => {
   dm.danger = {

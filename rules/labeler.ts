@@ -1,10 +1,6 @@
-import { danger, schedule } from 'danger';
+import { danger } from 'danger';
 
 console.log('labeler was loaded.');
-
-// Make schedule testable with Jest. Inspiration: https://git.io/fNh6i
-const testableSchedule = (reason: string, action: any) =>
-  typeof jest !== 'undefined' ? action : schedule(action);
 
 const questionWords: Set<string> = new Set([
   'how',
@@ -50,34 +46,35 @@ const matchKeyword = (
   return words.some((word: string) => keywords.has(word.toLowerCase()));
 };
 
-export const labeler = testableSchedule(
-  'Label newly created issue based on keywords',
-  async () => {
-    console.log('labeler was run');
+export const labeler = async () => {
+  console.log('labeler was run');
 
-    const gh = danger.github as any;
-    const repo = gh.repository;
-    const issue = gh.issue;
-    const title = issue.title;
-    const currentLabels = danger.github.issue.labels.map(i => i.name);
+  const gh = danger.github as any;
+  const repo = gh.repository;
+  const issue = gh.issue;
+  const title = issue.title;
+  const currentLabels = danger.github.issue.labels.map(i => i.name);
 
-    let labels: Set<string> = new Set(currentLabels);
+  let labels: Set<string> = new Set(currentLabels);
 
-    if (endsWith('?', title) || matchKeyword(questionWords, title, true)) {
-      labels.add('question').add('type: question or discussion');
-    }
-
-    if (matchKeyword(documentationWords, title)) {
-      labels.add('type: documentation');
-    }
-
-    if (labels.size > 0) {
-      await danger.github.api.issues.addLabels({
-        owner: repo.owner.login,
-        repo: repo.name,
-        number: issue.number,
-        labels: Array.from(labels)
-      });
-    }
+  if (endsWith('?', title) || matchKeyword(questionWords, title, true)) {
+    labels.add('question').add('type: question or discussion');
   }
-);
+
+  if (matchKeyword(documentationWords, title)) {
+    labels.add('type: documentation');
+  }
+
+  if (labels.size > 0) {
+    await danger.github.api.issues.addLabels({
+      owner: repo.owner.login,
+      repo: repo.name,
+      number: issue.number,
+      labels: Array.from(labels)
+    });
+  }
+};
+
+export default async () => {
+  await labeler();
+};

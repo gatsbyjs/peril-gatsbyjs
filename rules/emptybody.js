@@ -8,10 +8,13 @@ maintainers resolve your issue.\
 `;
 
 export const emptybody = () => {
-  const { login, body } = danger.github.issue;
+  const {
+    user: { login: username },
+    body
+  } = danger.github.issue;
 
   if (body.trim().length === 0) {
-    markdown(getMessage(login));
+    markdown(getMessage(username));
   }
 };
 

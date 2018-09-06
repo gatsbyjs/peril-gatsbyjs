@@ -1,11 +1,15 @@
 {
-  "name": "moya-peril",
+  "name": "peril-gatsbyjs",
   "version": "1.0.0",
-  "repository": "https://github.com/Moya/moya-peril",
+  "repository": "https://github.com/gatsbyjs/peril-gatsbyjs",
   "author": "Steven Deutsch <stevensdeutsch@yahoo.com>",
+  "contributors": [
+    "Jason Lengstorf <jason@gatsbyjs.com>",
+    "Dustin Schau <dustin@gatsbyjs.com>"
+  ],
   "license": "MIT",
   "scripts": {
-    "test": "jest test"
+    "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",
@@ -14,19 +18,6 @@
     "jest": "^22.4.3",
     "ts-jest": "^22.4.4",
     "typescript": "^2.3.2"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "(.test)\\.(ts|tsx)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ]
   },
   "dependencies": {
     "@slack/client": "^4.5.0"

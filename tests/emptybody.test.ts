@@ -22,22 +22,22 @@ beforeEach(() => {
 });
 
 describe('a new issue', () => {
-  it('has no content in the body', () => {
+  it('has no content in the body', async () => {
     dm.danger.github.issue.body = '';
-    return emptybody().then(() => {
-      expect(dm.markdown).toBeCalled();
-    });
+
+    await emptybody();
+    
+    expect(dm.markdown).toBeCalled();
   });
-  it('only contains whitespace in body', () => {
+  it('only contains whitespace in body', async () => {
     dm.danger.github.issue.body = '\n';
-    return emptybody().then(() => {
-      expect(dm.markdown).toBeCalled();
-    });
+    await emptybody()
+    
+    expect(dm.markdown).toBeCalled();
   });
-  it('has a body with content', () => {
+  it('has a body with content', async () => {
     dm.danger.github.issue.body = 'Moya is awesome';
-    return emptybody().then(() => {
-      expect(dm.markdown).not.toBeCalled();
-    });
+    await emptybody()
+    expect(dm.markdown).not.toBeCalled();
   });
 });

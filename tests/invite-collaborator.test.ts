@@ -1,5 +1,6 @@
 jest.mock('danger', () => jest.fn());
 import * as danger from 'danger';
+
 const dm = danger as any;
 
 import { inviteCollaborator } from '../rules/invite-collaborator';
@@ -33,20 +34,23 @@ beforeEach(() => {
 });
 
 describe('a closed pull request', () => {
-  it('was merged and authored by a first-time contributor', () => {
+  it('was merged and authored by a first-time contributor', async () => {
     dm.danger.github.pr.merged = true;
-    return inviteCollaborator().then(() => {
-      expect(dm.danger.github.api.issues.createComment).toBeCalled();
-      expect(dm.danger.github.api.orgs.addTeamMembership).toBeCalled();
-    });
+    
+    await inviteCollaborator();
+
+    expect(dm.danger.github.api.issues.createComment).toBeCalled();
+    expect(dm.danger.github.api.orgs.addTeamMembership).toBeCalled();
+
   });
 
-  it('was merged and authored by an existing collaborator', () => {
+  it('was merged and authored by an existing collaborator', async () => {
     dm.danger.github.pr.merged = true;
     dm.danger.github.api.orgs.getTeamMembership = () =>
-      Promise.resolve({ meta: { status: '204 No Content' } });
-    return inviteCollaborator().then(() => {
-      expect(dm.danger.github.api.issues.createComment).not.toBeCalled();
-    });
+      Promise.resolve({ headers: { status: '204 No Content' } });
+
+    await inviteCollaborator();
+
+    expect(dm.danger.github.api.issues.createComment).not.toBeCalled();
   });
 });

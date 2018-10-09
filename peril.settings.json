@@ -3,7 +3,7 @@
     "settings": {
         "ignored_repos": [],
         "env_vars": ["SLACK_WEBHOOK_URL"],
-        "modules": ["@slack/client"]
+        "modules": ["@slack/client", "joi", "js-yaml"]
     },
     "rules": {
         "issues.opened": ["rules/emptybody.ts", "rules/labeler.ts"],
@@ -11,6 +11,11 @@
         "pull_request.closed (pull_request.merged == true)": [
             "rules/invite-collaborator.ts"
         ]
+    },
+    "repos": {
+        "gatsbyjs/gatsby" : {
+            "pull_request": ["rules/validate-yaml.ts"]
+        }
     },
     "tasks": {
         "slack-test": "gatsbyjs/peril-gatsbyjs@tasks/slacktest.ts"

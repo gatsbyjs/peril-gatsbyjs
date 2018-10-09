@@ -14,7 +14,7 @@
     },
     "repos": {
         "gatsbyjs/gatsby" : {
-            "pull_request": ["rules/validate-yaml.ts"]
+            "pull_request": ["gatsbyjs/peril-gatsbyjs@rules/validate-yaml.ts"]
         }
     },
     "tasks": {

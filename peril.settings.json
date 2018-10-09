@@ -12,11 +12,6 @@
             "rules/invite-collaborator.ts"
         ]
     },
-    "repos": {
-        "gatsbyjs/gatsby" : {
-            "pull_request": ["gatsbyjs/peril-gatsbyjs@rules/validate-yaml.ts"]
-        }
-    },
     "tasks": {
         "slack-test": "gatsbyjs/peril-gatsbyjs@tasks/slacktest.ts"
     },

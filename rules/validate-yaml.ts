@@ -124,9 +124,12 @@ export const utils = {
   }
 }
 
+console.log('validate-yaml.ts was loaded');
+
 export const validateYaml = async () => {
   return Promise.all(
     Object.entries(fileSchemas).map(async ([filePath, schemaFn]) => {
+      console.log('Validate YAML?');
       if (!(danger.git.modified_files.includes(filePath))) {
         return
       }
@@ -140,6 +143,7 @@ export const validateYaml = async () => {
       }
 
       const result = Joi.validate(content, await schemaFn(), { abortEarly: false})
+      console.log(result);
       if (result.error) {
         const customErrors : { [id: string]: string[] } = {} 
         result.error.details.forEach(detail => {

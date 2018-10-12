@@ -13,7 +13,7 @@ Here are links to the relevant tools, docs, and apps we’re using:
 - [Peril](https://github.com/danger/peril)
 - [Danger JS](http://danger.systems/js/)
 - [Peril for Orgs](https://github.com/danger/peril/blob/master/docs/setup_for_org.md)
-- [Peril on the GatsbyJS Heroku team](https://dashboard.heroku.com/apps/peril-gatsbyjs)
+- [Peril on the GatsbyJS Heroku team](https://dashboard.heroku.com/apps/gatsby-peril)
 
 ### What is this project?
 

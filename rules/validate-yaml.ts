@@ -3,7 +3,7 @@ import { load as yamlLoad } from 'js-yaml'
 import * as Joi from 'joi'
 import * as path from 'path'
 
-const supportedImageExts = ['.jpg', '.jpeg']
+const supportedImageExts = ['.jpg', '.jpeg', '.gif', '.png']
 const uriOptions = { scheme: [`https`, `http`] }
 const githubRepoRegex: RegExp = new RegExp(`^https?:\/\/github.com\/[^/]+/[^/]+$`)
 

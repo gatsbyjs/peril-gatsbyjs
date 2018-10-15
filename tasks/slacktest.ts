@@ -1,8 +1,8 @@
-import { danger, peril } from "danger";
-import { IncomingWebhook, IncomingWebhookSendArguments } from "@slack/client";
+// import { danger, peril } from "danger";
+// import { IncomingWebhook, IncomingWebhookSendArguments } from "@slack/client";
 
-const org = "gatsbyjs";
-const label = "stale?";
+// const org = "gatsbyjs";
+// const label = "stale?";
 
 /**
  * A task that accepts Slack incoming webhook data
@@ -90,10 +90,11 @@ export interface Result {
 // https://developer.github.com/v3/search/#search-issues
 
 export default async () => {
-  const api = danger.github.api;
-  const staleQuery = `org:${org} label:${label} state:open`;
-  const searchResponse = await api.search.issues({ q: staleQuery });
-  const items = searchResponse.data.items;
+  console.log("new issue task!");
+  // const api = danger.github.api;
+  // const staleQuery = `org:${org} label:${label} state:open`;
+  // const searchResponse = await api.search.issues({ q: staleQuery });
+  // const items = searchResponse.data.items;
 
   // // Bail early
   // if (items.length === 0) {

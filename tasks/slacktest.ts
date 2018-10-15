@@ -62,30 +62,30 @@
 //   };
 //   await slackData(data);
 // };
-export interface Result {
-  url: string;
-  repository_url: string;
-  labels_url: string;
-  comments_url: string;
-  events_url: string;
-  html_url: string;
-  id: number;
-  node_id: string;
-  number: number;
-  title: string;
-  user: any;
-  labels: any[];
-  state: string;
-  assignee?: any;
-  milestone?: any;
-  comments: number;
-  created_at: Date;
-  updated_at: Date;
-  closed_at?: any;
-  pull_request: any;
-  body: string;
-  score: number;
-}
+// export interface Result {
+//   url: string;
+//   repository_url: string;
+//   labels_url: string;
+//   comments_url: string;
+//   events_url: string;
+//   html_url: string;
+//   id: number;
+//   node_id: string;
+//   number: number;
+//   title: string;
+//   user: any;
+//   labels: any[];
+//   state: string;
+//   assignee?: any;
+//   milestone?: any;
+//   comments: number;
+//   created_at: Date;
+//   updated_at: Date;
+//   closed_at?: any;
+//   pull_request: any;
+//   body: string;
+//   score: number;
+// }
 
 // https://developer.github.com/v3/search/#search-issues
 

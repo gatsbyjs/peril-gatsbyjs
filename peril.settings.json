@@ -6,6 +6,7 @@
         "modules": ["@slack/client", "joi", "js-yaml"]
     },
     "rules": {
+        "issues.opened": ["rules/emptybody.ts", "rules/labeler.ts"],
         "pull_request.opened": ["rules/emptybody.ts"],
         "pull_request.closed (pull_request.merged == true)": [
             "rules/invite-collaborator.ts"

@@ -9,7 +9,8 @@
   ],
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "format": "prettier --write \"**/*.ts\""
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",
@@ -20,6 +21,7 @@
     "jest": "^22.4.3",
     "joi": "^13.7.0",
     "js-yaml": "^3.12.0",
+    "prettier": "^1.14.3",
     "ts-jest": "^22.4.4",
     "typescript": "^2.3.2"
   },

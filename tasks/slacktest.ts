@@ -1,29 +1,64 @@
-import { peril } from "danger";
-import { IncomingWebhook } from "@slack/client";
+import { danger } from "danger";
 
-console.log("slacktest was loaded");
+const org = "gatsbyjs";
+const label = "stale?";
+
+export interface Result {
+  url: string;
+  repository_url: string;
+  labels_url: string;
+  comments_url: string;
+  events_url: string;
+  html_url: string;
+  id: number;
+  node_id: string;
+  number: number;
+  title: string;
+  user: any;
+  labels: any[];
+  state: string;
+  assignee?: any;
+  milestone?: any;
+  comments: number;
+  created_at: Date;
+  updated_at: Date;
+  closed_at?: any;
+  pull_request: any;
+  body: string;
+  score: number;
+}
+
+// https://developer.github.com/v3/search/#search-issues
 
 export default async () => {
-  console.log("slacktest is running");
-  if (!peril.env.SLACK_WEBHOOK_URL) {
-    throw new Error("No Slack webhook URL is set!");
+  const { slackMessage, slackData } = await import("./slackDevChannel");
+
+  const api = danger.github.api;
+  const staleQuery = `org:${org} label:${label} state:open`;
+  const searchResponse = await api.search.issues({ q: staleQuery });
+  const items = searchResponse.data.items;
+
+  // Bail early
+  if (items.length === 0) {
+    await slackMessage("No stale issues found.");
+    return;
   }
 
-  const webhook = new IncomingWebhook(peril.env.SLACK_WEBHOOK_URL);
-  await webhook.send({
-    unfurl_links: false,
-    text:
-      "Peril _appears_ to be working properly. This should fire every hour.",
-    attachments: [
-      {
-        color: "good",
-        title: "Peril => Slack Testing",
-        title_link:
-          "https://github.com/gatsbyjs/peril-gatsbyjs/blob/master/rules/slacktest.ts",
-        author_name: "gatsbot",
-        author_link: "https://github.com/gatsbyjs/peril-gatsbyjs",
-        fallback: "Peril => Slack Testing"
-      }
-    ]
+  // Convert the open issues into attachments
+  const attachments = items.map((r: Result) => ({
+    fallback: "Required plain-text summary of the attachment.",
+    color: "#36a64f",
+    author_name: r.user.login,
+    author_link: r.user.html_url,
+    author_icon: r.user.avatar_url,
+    title: r.title,
+    title_link: r.html_url
+  }));
+
+  const text = `There are ${items.length} stale issues:`;
+  await slackData({
+    text,
+    attachments,
+    unfurl_links: false
   });
 };

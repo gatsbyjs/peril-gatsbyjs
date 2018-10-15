@@ -34,34 +34,34 @@ const label = "stale?";
  * this is also usable as a task
  */
 
-const slackData = async (data: IncomingWebhookSendArguments) => {
-  if (!data) {
-    console.log(
-      "No data was passed to slack-dev-channel, so a message will not be sent."
-    );
-  } else {
-    const url = peril.env.SLACK_WEBHOOK_URL || "";
-    const webhook = new IncomingWebhook(url);
-    await webhook.send(data);
-  }
-};
+// const slackData = async (data: IncomingWebhookSendArguments) => {
+//   if (!data) {
+//     console.log(
+//       "No data was passed to slack-dev-channel, so a message will not be sent."
+//     );
+//   } else {
+//     const url = peril.env.SLACK_WEBHOOK_URL || "";
+//     const webhook = new IncomingWebhook(url);
+//     await webhook.send(data);
+//   }
+// };
 
-/**
- * Send a slack message to the dev channel in Artsy
- * @param message the message to send to #dev
- */
-const slackMessage = async (message: string) => {
-  const data = {
-    unfurl_links: false,
-    attachments: [
-      {
-        color: "good",
-        title: message
-      }
-    ]
-  };
-  await slackData(data);
-};
+// /**
+//  * Send a slack message to the dev channel in Artsy
+//  * @param message the message to send to #dev
+//  */
+// const slackMessage = async (message: string) => {
+//   const data = {
+//     unfurl_links: false,
+//     attachments: [
+//       {
+//         color: "good",
+//         title: message
+//       }
+//     ]
+//   };
+//   await slackData(data);
+// };
 export interface Result {
   url: string;
   repository_url: string;
@@ -95,27 +95,27 @@ export default async () => {
   const searchResponse = await api.search.issues({ q: staleQuery });
   const items = searchResponse.data.items;
 
-  // Bail early
-  if (items.length === 0) {
-    await slackMessage("No stale issues found.");
-    return;
-  }
+  // // Bail early
+  // if (items.length === 0) {
+  //   await slackMessage("No stale issues found.");
+  //   return;
+  // }
 
-  // Convert the open issues into attachments
-  const attachments = items.map((r: Result) => ({
-    fallback: "Required plain-text summary of the attachment.",
-    color: "#36a64f",
-    author_name: r.user.login,
-    author_link: r.user.html_url,
-    author_icon: r.user.avatar_url,
-    title: r.title,
-    title_link: r.html_url
-  }));
+  // // Convert the open issues into attachments
+  // const attachments = items.map((r: Result) => ({
+  //   fallback: "Required plain-text summary of the attachment.",
+  //   color: "#36a64f",
+  //   author_name: r.user.login,
+  //   author_link: r.user.html_url,
+  //   author_icon: r.user.avatar_url,
+  //   title: r.title,
+  //   title_link: r.html_url
+  // }));
 
-  const text = `There are ${items.length} stale issues:`;
-  await slackData({
-    text,
-    attachments,
-    unfurl_links: false
-  });
+  // const text = `There are ${items.length} stale issues:`;
+  // await slackData({
+  //   text,
+  //   attachments,
+  //   unfurl_links: false
+  // });
 };

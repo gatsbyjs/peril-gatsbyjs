@@ -6,14 +6,14 @@
         "modules": ["@slack/client", "joi", "js-yaml"]
     },
     "rules": {
-        "issues.opened": ["rules/emptybody.ts", "rules/labeler.ts"],
+        "issues.opened": ["tasks/slacktest.ts"],
         "pull_request.opened": ["rules/emptybody.ts"],
         "pull_request.closed (pull_request.merged == true)": [
             "rules/invite-collaborator.ts"
         ]
     },
     "tasks": {
-        "slack-test": "m-allanson/peril-gatsbyjs@tasks/slacktest.ts"
+        "slack-test": "tasks/slacktest.ts"
     },
     "scheduler": {
         "hourly": "slack-test"

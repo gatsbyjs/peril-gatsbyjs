@@ -25,6 +25,8 @@
   },
   "dependencies": {
     "@slack/client": "^4.5.0",
+    "date-fns": "^1.29.0",
+    "github-webhook-event-types": "^1.2.1",
     "tslint": "^5.11.0"
   }
 }

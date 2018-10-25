@@ -1,15 +1,6 @@
 jest.mock("danger", () => jest.fn());
-// import { IssueComment } from "github-webhook-event-types";
-// import * as danger from "danger";
-// const dm = danger as any;
 
 import { dateDaysAgo } from "../tasks/stale";
-
-// beforeEach(() => {
-//   dm.danger = {
-//     github: {}
-//   };
-// });
 
 describe("date handling", () => {
   it("subtracts one day", () => {
@@ -28,3 +19,5 @@ describe("date handling", () => {
     expect(formatted).toEqual(`2014-12-31`);
   });
 });
+
+// test for quotes around labels

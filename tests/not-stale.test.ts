@@ -38,7 +38,7 @@ describe("a new issue comment", () => {
         repo: "gatsby",
         owner: "gatsbyjs",
         number: 100,
-        name: STALE_LABEL
+        name: encodeURIComponent(STALE_LABEL)
       });
     });
   });

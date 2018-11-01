@@ -6,7 +6,6 @@
         "modules": ["@slack/client", "joi", "js-yaml"]
     },
     "rules": {
-        "issue_comment.edited": ["rules/run-stale-immediately.ts"],
         "issues.opened": ["rules/emptybody.ts", "rules/labeler.ts"],
         "pull_request.opened": ["rules/emptybody.ts"],
         "pull_request.closed (pull_request.merged == true)": [

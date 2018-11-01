@@ -17,6 +17,6 @@
         "stale": "tasks/stale.ts"
     },
     "scheduler": {
-        "hourly": "stale"
+        "daily": "stale"
     }
 }

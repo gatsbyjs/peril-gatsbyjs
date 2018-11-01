@@ -3,13 +3,13 @@ import * as endOfToday from "date-fns/end_of_today";
 import * as subDays from "date-fns/sub_days";
 import * as format from "date-fns/format";
 
-const owner = `m-allanson`;
-const repo = `gatsby`;
+const owner = `gatsbyjs`;
+const repo = `gatsby-starter-default`;
 
 const STALE_LABEL = `stale?`;
 const EXEMPT_LABEL = `not stale`;
-const DAYS_TO_STALE = -1;
-const DAYS_TO_CLOSE = -1;
+const DAYS_TO_STALE = 20;
+const DAYS_TO_CLOSE = 10;
 const MAX_ACTIONS = 2;
 const STALE_MESSAGE = `Old issues will be closed after ${DAYS_TO_STALE +
   DAYS_TO_CLOSE} days of inactivity. This issue has been quiet for ${DAYS_TO_STALE} days and is being marked as stale. Reply here or add the label "${EXEMPT_LABEL}" to keep this issue open!`;

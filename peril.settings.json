@@ -3,7 +3,7 @@
     "settings": {
         "ignored_repos": [],
         "env_vars": ["SLACK_WEBHOOK_URL"],
-        "modules": ["@slack/client", "joi", "js-yaml"]
+        "modules": ["@slack/client", "joi", "js-yaml", "date-fns"]
     },
     "rules": {
         "issues.opened": ["rules/emptybody.ts", "rules/labeler.ts"],

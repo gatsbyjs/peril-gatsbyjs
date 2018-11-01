@@ -27,19 +27,18 @@ beforeEach(() => {
 });
 
 describe("a new issue comment", () => {
-  it("removes stale? label", () => {
+  it("removes stale? label", async () => {
     dm.danger.github.issue.labels = [
       { name: "foo" },
       { name: "stale?" },
       { name: "bar" }
     ];
-    return notStale().then(() => {
-      expect(dm.danger.github.api.issues.removeLabel).toBeCalledWith({
-        repo: "gatsby",
-        owner: "gatsbyjs",
-        number: 100,
-        name: encodeURIComponent(STALE_LABEL)
-      });
+    await notStale();
+    expect(dm.danger.github.api.issues.removeLabel).toBeCalledWith({
+      repo: "gatsby",
+      owner: "gatsbyjs",
+      number: 100,
+      name: encodeURIComponent(STALE_LABEL)
     });
   });
   it("does nothing without a stale? label", () => {

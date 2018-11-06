@@ -3,7 +3,7 @@
     "settings": {
         "ignored_repos": [],
         "env_vars": ["SLACK_WEBHOOK_URL"],
-        "modules": ["@slack/client", "joi", "js-yaml"]
+        "modules": ["@slack/client", "joi", "js-yaml", "date-fns"]
     },
     "rules": {
         "issues.opened": ["rules/emptybody.ts", "rules/labeler.ts"],
@@ -18,9 +18,9 @@
         }
     },
     "tasks": {
-        "slack-test": "gatsbyjs/peril-gatsbyjs@tasks/slacktest.ts"
+        "stale": "tasks/stale.ts"
     },
     "scheduler": {
-        "30 * * * * ?": "slack-test"
+        "daily": "stale"
     }
 }

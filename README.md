@@ -56,6 +56,10 @@ Changes to [`peril.settings.json`](./peril.settings.json) require the Heroku App
 
 Changes to `settings.modules` in [`peril.settings.json`](./peril.settings.json) require the app to be rebuilt on Heroku. This is to allow Heroku to install any new dependencies. See the repo for more info (TODO: add the repo).
 
+### Debugging 
+
+Add the following env var to the Heroku app: `DEBUG=octokit:rest*`. This will enable debug output for the GitHub API library used by Peril, allowing you to see the exact API calls that are made to GitHub.
+
 ## Acknowledgments
 
 Huge thanks to [@SD10](https://github.com/SD10) for the initial setup help and for additional guidance along the way.

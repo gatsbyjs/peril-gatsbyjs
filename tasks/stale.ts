@@ -20,6 +20,19 @@ export const dateDaysAgo = (today: Date, days: number): string => {
   return format(daysAgo, "YYYY-MM-DD");
 };
 
+interface ApiError {
+  action: string;
+  opts: object;
+  error: any;
+}
+
+const logApiError = ({ action, opts, error }: ApiError) => {
+  const msg = `Could not run ${action} with options ${JSON.stringify(
+    opts
+  )}\n Error was ${error}\nSet env var DEBUG=octokit:rest* for extended logging info.`;
+  console.log(msg);
+};
+
 const search = async (days: number, query: string) => {
   const api = danger.github.api;
   const timestamp = dateDaysAgo(endOfToday(), days);
@@ -31,60 +44,47 @@ const search = async (days: number, query: string) => {
     per_page: MAX_ACTIONS
   });
   const items = searchResponse.data.items;
-  if (items.length > MAX_ACTIONS) items.length = MAX_ACTIONS;
-  return items;
+  return items.slice(0, Math.min(items.length, MAX_ACTIONS));
 };
 
 const makeItStale = async (issue: { number: number }) => {
-  let opts;
-  const number = issue.number;
+  let opts: any; // any :(
   const api = danger.github.api;
-  const defaultOpts = { owner, repo, number };
+  const defaultOpts = { owner, repo, number: issue.number };
 
+  opts = { ...defaultOpts, labels: [STALE_LABEL] };
   try {
-    opts = { ...defaultOpts, labels: [STALE_LABEL] };
     await api.issues.addLabels(opts);
   } catch (error) {
-    console.log(
-      `Could not run issues.addLabels with options ${JSON.stringify(opts)}`
-    );
+    logApiError({ action: `issues.addLabels`, opts, error });
   }
 
+  opts = { ...defaultOpts, body: STALE_MESSAGE };
   try {
-    opts = { ...defaultOpts, body: STALE_MESSAGE };
     await api.issues.createComment(opts);
   } catch (error) {
-    console.log(
-      `Could not run issues.createComment with options ${JSON.stringify(opts)}`
-    );
+    logApiError({ action: `issues.createComment`, opts, error });
   }
 };
 
 const makeItClosed = async (issue: { number: number }) => {
-  let opts;
-  const number = issue.number;
+  let opts: any; // any :(
   const api = danger.github.api;
-  const defaultOpts = { owner, repo, number };
+  const defaultOpts = { owner, repo, number: issue.number };
+
+  opts = { ...defaultOpts, body: CLOSE_MESSAGE };
   try {
-    opts = { ...defaultOpts, body: CLOSE_MESSAGE };
     await api.issues.createComment(opts);
   } catch (error) {
-    console.log(
-      `Could not run issues.createComment with options ${JSON.stringify(opts)}`
-    );
+    logApiError({ action: `issues.createComment`, opts, error });
   }
 
+  opts = { ...defaultOpts, state: "closed" };
   try {
-    await api.issues.edit({ ...defaultOpts, state: "closed" });
+    await api.issues.edit(opts);
   } catch (error) {
-    console.log(
-      `Could not run issues.edit with options ${JSON.stringify({
-        ...defaultOpts,
-        state: "closed"
-      })}`
-    );
+    logApiError({ action: `issues.edit`, opts, error });
   }
-  await api.issues.edit({ owner, repo, number, state: `closed` });
 };
 
 export default async () => {

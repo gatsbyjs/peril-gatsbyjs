@@ -4,7 +4,6 @@ import * as subDays from "date-fns/sub_days";
 import * as format from "date-fns/format";
 
 const owner = `gatsbyjs`;
-const repo = `gatsby-starter-default`;
 
 const STALE_LABEL = `stale?`;
 const EXEMPT_LABEL = `not stale`;
@@ -36,7 +35,7 @@ const logApiError = ({ action, opts, error }: ApiError) => {
 const search = async (days: number, query: string) => {
   const api = danger.github.api;
   const timestamp = dateDaysAgo(endOfToday(), days);
-  const q = `-label:"${EXEMPT_LABEL}" repo:${owner}/${repo} type:issue state:open updated:<${timestamp} ${query}`;
+  const q = `-label:"${EXEMPT_LABEL}" org:${owner} type:issue state:open updated:<${timestamp} ${query}`;
   const searchResponse = await api.search.issues({
     q,
     order: "asc",
@@ -50,7 +49,7 @@ const search = async (days: number, query: string) => {
 const makeItStale = async (issue: { number: number }) => {
   let opts: any; // any :(
   const api = danger.github.api;
-  const defaultOpts = { owner, repo, number: issue.number };
+  const defaultOpts = { owner, number: issue.number };
 
   opts = { ...defaultOpts, labels: [STALE_LABEL] };
   try {
@@ -70,7 +69,7 @@ const makeItStale = async (issue: { number: number }) => {
 const makeItClosed = async (issue: { number: number }) => {
   let opts: any; // any :(
   const api = danger.github.api;
-  const defaultOpts = { owner, repo, number: issue.number };
+  const defaultOpts = { owner, number: issue.number };
 
   opts = { ...defaultOpts, body: CLOSE_MESSAGE };
   try {

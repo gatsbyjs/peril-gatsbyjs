@@ -32,6 +32,11 @@ const logApiError = ({ action, opts, error }: ApiError) => {
   console.log(msg);
 };
 
+// url format is "https://api.github.com/repos/<orgname>/<reponame>"
+// See https://api.github.com/search/issues?q=-label:%22not%20stale%22 for examples
+// TODO: hit the url and parse the name from the response, with error handling
+const getRepoFromUrl = (url: string) => url.split("/").pop();
+
 const search = async (days: number, query: string) => {
   const api = danger.github.api;
   const timestamp = dateDaysAgo(endOfToday(), days);
@@ -46,10 +51,14 @@ const search = async (days: number, query: string) => {
   return items.slice(0, Math.min(items.length, MAX_ACTIONS));
 };
 
-const makeItStale = async (issue: { number: number }) => {
+const makeItStale = async (issue: {
+  number: number;
+  repository_url: string;
+}) => {
   let opts: any; // any :(
   const api = danger.github.api;
-  const defaultOpts = { owner, number: issue.number };
+  const repo = getRepoFromUrl(issue.repository_url);
+  const defaultOpts = { owner, repo, number: issue.number };
 
   opts = { ...defaultOpts, labels: [STALE_LABEL] };
   try {
@@ -66,10 +75,14 @@ const makeItStale = async (issue: { number: number }) => {
   }
 };
 
-const makeItClosed = async (issue: { number: number }) => {
+const makeItClosed = async (issue: {
+  number: number;
+  repository_url: string;
+}) => {
   let opts: any; // any :(
   const api = danger.github.api;
-  const defaultOpts = { owner, number: issue.number };
+  const repo = getRepoFromUrl(issue.repository_url);
+  const defaultOpts = { owner, repo, number: issue.number };
 
   opts = { ...defaultOpts, body: CLOSE_MESSAGE };
   try {

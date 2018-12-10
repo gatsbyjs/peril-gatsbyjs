@@ -40,7 +40,7 @@ const getRepoFromUrl = (url: string) => url.split("/").pop();
 const search = async (days: number, query: string) => {
   const api = danger.github.api;
   const timestamp = dateDaysAgo(endOfToday(), days);
-  const q = `-label:"${EXEMPT_LABEL}" org:${owner} type:issue state:open updated:<${timestamp} ${query}`;
+  const q = `-label:"${EXEMPT_LABEL}" org:${owner} type:issue state:open archived:false updated:<${timestamp} ${query}`;
   const searchResponse = await api.search.issues({
     q,
     order: "asc",

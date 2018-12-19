@@ -2,7 +2,10 @@ jest.mock('danger', () => jest.fn());
 import * as danger from 'danger';
 const dm = danger as any;
 
-import { labeler } from '../rules/labeler';
+import * as l from '../rules/labeler';
+jest.spyOn(l, `logApiError`)
+
+let apiError: any
 
 beforeEach(() => {
   dm.danger = {
@@ -30,7 +33,7 @@ describe('a new issue', () => {
   it('with question mark in a title', () => {
     dm.danger.github.issue.title =
       'Help - Has anyone hosted a gatsby.js site on Platform.sh?';
-    return labeler().then(() => {
+    return l.labeler().then(() => {
       expect(dm.danger.github.api.issues.addLabels).toBeCalledWith({
         repo: 'gatsby',
         owner: 'gatsbyjs',
@@ -43,7 +46,7 @@ describe('a new issue', () => {
   it('with existing labels', () => {
     dm.danger.github.issue.title = 'How are labels handled?';
     dm.danger.github.issue.labels = [{ name: 'question' }];
-    return labeler().then(() => {
+    return l.labeler().then(() => {
       expect(dm.danger.github.api.issues.addLabels).toBeCalledWith({
         repo: 'gatsby',
         owner: 'gatsbyjs',
@@ -56,7 +59,7 @@ describe('a new issue', () => {
   it('starting with how', () => {
     dm.danger.github.issue.title =
       'How do you justify Gatsby’s bundle size to clients';
-    return labeler().then(() => {
+    return l.labeler().then(() => {
       expect(dm.danger.github.api.issues.addLabels).toBeCalledWith({
         repo: 'gatsby',
         owner: 'gatsbyjs',
@@ -68,7 +71,7 @@ describe('a new issue', () => {
 
   it('including tutorial', () => {
     dm.danger.github.issue.title = 'Tutorial template + gold standard example';
-    return labeler().then(() => {
+    return l.labeler().then(() => {
       expect(dm.danger.github.api.issues.addLabels).toBeCalledWith({
         repo: 'gatsby',
         owner: 'gatsbyjs',
@@ -80,7 +83,7 @@ describe('a new issue', () => {
 
   it('including readme', () => {
     dm.danger.github.issue.title = '[v2] default starter: update README';
-    return labeler().then(() => {
+    return l.labeler().then(() => {
       expect(dm.danger.github.api.issues.addLabels).toBeCalledWith({
         repo: 'gatsby',
         owner: 'gatsbyjs',
@@ -92,8 +95,33 @@ describe('a new issue', () => {
 
   it('not recognised', () => {
     dm.danger.github.issue.title = 'Supporting HSTS and how to HSTS preloading';
-    return labeler().then(() => {
+    return l.labeler().then(() => {
       expect(dm.danger.github.api.issues.addLabels).not.toBeCalled();
     });
   });
+
+  describe('error logging', () => {
+    beforeEach(() => {
+      apiError = new Error("Mocked error")
+      dm.danger.github.issue.title =
+      'Help - Has anyone hosted a gatsby.js site on Platform.sh?';
+      dm.danger.github.api.issues.addLabels = () => Promise.reject(apiError)
+    });
+
+    it("log error", () => {
+      return l.labeler().then(() => {
+        expect(l.logApiError).toHaveBeenCalledWith({
+          "action": "issues.addLabel",
+          "error": apiError,
+          "opts": {
+            "labels": ["question", "type: question or discussion"],
+            "number": 100,
+            "owner": "gatsbyjs", "repo": "gatsby"
+          }
+        })
+      });
+    });
+  });
+
+
 });

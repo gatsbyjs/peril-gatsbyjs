@@ -2,6 +2,7 @@ import { danger, peril } from "danger";
 import * as endOfToday from "date-fns/end_of_today";
 import * as subDays from "date-fns/sub_days";
 import * as format from "date-fns/format";
+import { IssueComment } from "github-webhook-event-types";
 
 const owner = `gatsbyjs`;
 
@@ -29,7 +30,7 @@ const logApiError = ({ action, opts, error }: ApiError) => {
   const msg = `Could not run ${action} with options ${JSON.stringify(
     opts
   )}\n Error was ${error}\nSet env var DEBUG=octokit:rest* for extended logging info.`;
-  console.log(msg);
+  console.warn(msg);
 };
 
 // url format is "https://api.github.com/repos/<orgname>/<reponame>"

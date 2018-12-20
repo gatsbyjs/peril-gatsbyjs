@@ -15,6 +15,15 @@
     "repos": {
         "gatsbyjs/gatsby" : {
             "pull_request": ["gatsbyjs/peril-gatsbyjs@rules/validate-yaml.ts"]
+        },
+        "gatsbyjs/gatsby-starter-default" : {
+            "pull_request.opened": ["gatsbyjs/peril-gatsbyjs@rules/pull-request-on-starter.ts"]
+        },
+        "gatsbyjs/gatsby-starter-hello-world" : {
+            "pull_request.opened": ["gatsbyjs/peril-gatsbyjs@rules/pull-request-on-starter.ts"]
+        },
+        "gatsbyjs/gatsby-starter-blog" : {
+            "pull_request.opened": ["gatsbyjs/peril-gatsbyjs@rules/pull-request-on-starter.ts"]
         }
     },
     "tasks": {

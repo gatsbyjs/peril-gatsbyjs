@@ -10,7 +10,7 @@ const STALE_LABEL = `stale?`;
 const EXEMPT_LABEL = `not stale`;
 const DAYS_TO_STALE = 20;
 const DAYS_TO_CLOSE = 10;
-const MAX_ACTIONS = 10;
+const MAX_ACTIONS = 20;
 const STALE_MESSAGE = `Old issues will be closed after ${DAYS_TO_STALE +
   DAYS_TO_CLOSE} days of inactivity. This issue has been quiet for ${DAYS_TO_STALE} days and is being marked as stale. Reply here or add the label "${EXEMPT_LABEL}" to keep this issue open!`;
 const CLOSE_MESSAGE = `This issue is being closed due to inactivity. Is this a mistake? Please re-open this issue or create a new issue.`;

@@ -1,35 +1,41 @@
 {
-    "$schema": "https://raw.githubusercontent.com/danger/peril/master/peril-settings-json.schema",
-    "settings": {
-        "ignored_repos": [],
-        "env_vars": ["SLACK_WEBHOOK_URL"],
-        "modules": ["@slack/client", "joi", "js-yaml", "date-fns"]
+  "$schema": "https://raw.githubusercontent.com/danger/peril/master/peril-settings-json.schema",
+  "settings": {
+    "ignored_repos": [],
+    "env_vars": ["SLACK_WEBHOOK_URL"],
+    "modules": ["@slack/client", "joi", "js-yaml", "date-fns"]
+  },
+  "rules": {
+    "issue_comment": ["rules/not-stale.ts"],
+    "issues.opened": ["rules/emptybody.ts", "rules/labeler.ts"],
+    "pull_request.closed (pull_request.merged == true)": [
+      "rules/invite-collaborator.ts"
+    ]
+  },
+  "repos": {
+    "gatsbyjs/gatsby": {
+      "pull_request": ["gatsbyjs/peril-gatsbyjs@rules/validate-yaml.ts"]
     },
-    "rules": {
-        "issues.opened": ["rules/emptybody.ts", "rules/labeler.ts"],
-        // "pull_request.opened": ["rules/emptybody.ts"],
-        "pull_request.closed (pull_request.merged == true)": [
-            "rules/invite-collaborator.ts"
-        ]
+    "gatsbyjs/gatsby-starter-default": {
+      "pull_request.opened": [
+        "gatsbyjs/peril-gatsbyjs@rules/pull-request-on-starter.ts"
+      ]
     },
-    "repos": {
-        "gatsbyjs/gatsby" : {
-            "pull_request": ["gatsbyjs/peril-gatsbyjs@rules/validate-yaml.ts"]
-        },
-        "gatsbyjs/gatsby-starter-default" : {
-            "pull_request.opened": ["gatsbyjs/peril-gatsbyjs@rules/pull-request-on-starter.ts"]
-        },
-        "gatsbyjs/gatsby-starter-hello-world" : {
-            "pull_request.opened": ["gatsbyjs/peril-gatsbyjs@rules/pull-request-on-starter.ts"]
-        },
-        "gatsbyjs/gatsby-starter-blog" : {
-            "pull_request.opened": ["gatsbyjs/peril-gatsbyjs@rules/pull-request-on-starter.ts"]
-        }
+    "gatsbyjs/gatsby-starter-hello-world": {
+      "pull_request.opened": [
+        "gatsbyjs/peril-gatsbyjs@rules/pull-request-on-starter.ts"
+      ]
     },
-    "tasks": {
-        "stale": "tasks/stale.ts"
-    },
-    "scheduler": {
-        "daily": "stale"
+    "gatsbyjs/gatsby-starter-blog": {
+      "pull_request.opened": [
+        "gatsbyjs/peril-gatsbyjs@rules/pull-request-on-starter.ts"
+      ]
     }
+  },
+  "tasks": {
+    "stale": "tasks/stale.ts"
+  },
+  "scheduler": {
+    "daily": "stale"
+  }
 }

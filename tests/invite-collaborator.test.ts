@@ -1,56 +1,55 @@
-jest.mock('danger', () => jest.fn());
-import * as danger from 'danger';
+jest.mock("danger", () => jest.fn())
+import * as danger from "danger"
 
-const dm = danger as any;
+const dm = danger as any
 
-import { inviteCollaborator } from '../rules/invite-collaborator';
+import { inviteCollaborator } from "../rules/invite-collaborator"
 
 beforeEach(() => {
   dm.danger = {
     github: {
       thisPR: {
-        owner: 'gatsbyjs',
-        repo: 'peril-gatsbyjs',
-        number: 1
+        owner: "gatsbyjs",
+        repo: "peril-gatsbyjs",
+        number: 1,
       },
       pr: {
         user: {
-          login: 'someUser'
-        }
+          login: "someUser",
+        },
       },
       api: {
         orgs: {
-          getTeamMembership: () => Promise.resolve({ meta: { status: '404' } }),
+          getTeamMembership: () => Promise.resolve({ meta: { status: "404" } }),
           addTeamMembership: jest.fn(() =>
-            Promise.resolve({ data: { state: 'pending' } })
-          )
+            Promise.resolve({ data: { state: "pending" } })
+          ),
         },
         issues: {
-          createComment: jest.fn()
-        }
-      }
-    }
-  };
-});
+          createComment: jest.fn(),
+        },
+      },
+    },
+  }
+})
 
-describe('a closed pull request', () => {
-  it('was merged and authored by a first-time contributor', async () => {
-    dm.danger.github.pr.merged = true;
-    
-    await inviteCollaborator();
+describe("a closed pull request", () => {
+  it("was merged and authored by a first-time contributor", async () => {
+    dm.danger.github.pr.merged = true
 
-    expect(dm.danger.github.api.issues.createComment).toBeCalled();
-    expect(dm.danger.github.api.orgs.addTeamMembership).toBeCalled();
+    await inviteCollaborator()
 
-  });
+    expect(dm.danger.github.api.issues.createComment).toBeCalled()
+    expect(dm.danger.github.api.orgs.addTeamMembership).toBeCalled()
+  })
 
-  it('was merged and authored by an existing collaborator', async () => {
-    dm.danger.github.pr.merged = true;
+  it("was merged and authored by an existing collaborator", async () => {
+    dm.danger.github.pr.merged = true
     dm.danger.github.api.orgs.getTeamMembership = () =>
-      Promise.resolve({ headers: { status: '204 No Content' } });
+      Promise.resolve({ headers: { status: "204 No Content" } })
 
-    await inviteCollaborator();
+    await inviteCollaborator()
 
-    expect(dm.danger.github.api.issues.createComment).not.toBeCalled();
-  });
-});
+    expect(dm.danger.github.api.issues.createComment).not.toBeCalled()
+  })
+})

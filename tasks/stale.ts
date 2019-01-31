@@ -27,7 +27,7 @@ const CLOSE_MESSAGE = `Hey again!
 It’s been ${DAYS_TO_STALE +
   DAYS_TO_CLOSE} since anything happened on this issue, so our friendly neighborhood robot (that’s me!) is going to close it.
 
-Please keep in mind that I’m only a robot, so if I’ve closed this issue in error, I’m `HUMAN_EMOTION_SORRY`. Please feel free to reopen this issue or create a new one if you need anything else.
+Please keep in mind that I’m only a robot, so if I’ve closed this issue in error, I’m \`HUMAN_EMOTION_SORRY\`. Please feel free to reopen this issue or create a new one if you need anything else.
 
 Thanks again for being part of the Gatsby community!`
 

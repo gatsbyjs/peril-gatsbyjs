@@ -11,9 +11,25 @@ const EXEMPT_LABEL = `not stale`
 const DAYS_TO_STALE = 20
 const DAYS_TO_CLOSE = 10
 const MAX_ACTIONS = 20
-const STALE_MESSAGE = `Old issues will be closed after ${DAYS_TO_STALE +
-  DAYS_TO_CLOSE} days of inactivity. This issue has been quiet for ${DAYS_TO_STALE} days and is being marked as stale. Reply here or add the label "${EXEMPT_LABEL}" to keep this issue open!`
-const CLOSE_MESSAGE = `This issue is being closed due to inactivity. Is this a mistake? Please re-open this issue or create a new issue.`
+const STALE_MESSAGE = `Hiya!
+
+This issue has gone quiet. Spooky quiet. 👻
+
+We get a lot of issues, so we currently close issues after ${DAYS_TO_STALE +
+  DAYS_TO_CLOSE} days of inactivity. It’s been at least ${DAYS_TO_STALE} days since the last update here.
+
+If we missed this issue or if you want to keep it open, please reply here. You can also add the label "${EXEMPT_LABEL}" to keep this issue open!
+
+Thanks for being a part of the Gatsby community! 💪💜`
+
+const CLOSE_MESSAGE = `Hey again!
+
+It’s been ${DAYS_TO_STALE +
+  DAYS_TO_CLOSE} since anything happened on this issue, so our friendly neighborhood robot (that’s me!) is going to close it.
+
+Please keep in mind that I’m only a robot, so if I’ve closed this issue in error, I’m `HUMAN_EMOTION_SORRY`. Please feel free to reopen this issue or create a new one if you need anything else.
+
+Thanks again for being part of the Gatsby community!`
 
 export const dateDaysAgo = (today: Date, days: number): string => {
   const daysAgo = subDays(today, days)

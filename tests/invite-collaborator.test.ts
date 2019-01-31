@@ -52,4 +52,14 @@ describe("a closed pull request", () => {
 
     expect(dm.danger.github.api.issues.createComment).not.toBeCalled()
   })
+
+  it("does not comment if invitation failed", async () => {
+    dm.danger.github.pr.merged = true
+    dm.danger.github.api.orgs.addTeamMembership = () =>
+      Promise.reject({ headers: { status: "422 Unprocessable Entity" } })
+
+    await inviteCollaborator()
+
+    expect(dm.danger.github.api.issues.createComment).not.toBeCalled()
+  })
 })

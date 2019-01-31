@@ -64,6 +64,7 @@ export const inviteCollaborator = async () => {
   } catch (err) {
     console.log("Something went wrong.")
     console.log(err)
+    return
   }
 
   // For new contributors, roll out the welcome wagon!

@@ -1,11 +1,12 @@
-jest.mock('danger', () => jest.fn());
-import * as danger from 'danger';
-import { validateYaml, utils } from '../../rules/validate-yaml';
-const dm = danger as any;
-const mockedUtils = utils as any;
+jest.mock("danger", () => jest.fn())
+import * as danger from "danger"
+import { validateYaml, utils } from "../../rules/validate-yaml"
+const dm = danger as any
+const mockedUtils = utils as any
 
 let mockedResponses: { [id: string]: any }
-const setSitesYmlContent = (content:string) => mockedResponses['docs/sites.yml'] = content
+const setSitesYmlContent = (content: string) =>
+  (mockedResponses["docs/sites.yml"] = content)
 const resetMockedResponses = () => {
   mockedResponses = {}
 }
@@ -19,29 +20,26 @@ beforeEach(() => {
   mockedUtils.addErrorMsg.mockClear()
   dm.danger = {
     git: {
-      modified_files: [
-        'docs/sites.yml'
-      ]
+      modified_files: ["docs/sites.yml"],
     },
     github: {
       pr: {
         head: {
           repo: {
-            full_name: 'test/test',
+            full_name: "test/test",
           },
-          ref: 'branch',
-        }
+          ref: "branch",
+        },
       },
       utils: {
-        fileContents: (path:string) => mockedResponses[path]
-      }
-    }
-  };
-  
-});
+        fileContents: (path: string) => mockedResponses[path],
+      },
+    },
+  }
+})
 
-describe('a new PR', () => {
-  it (`Minimal valid entry passes validation`, async () => {
+describe("a new PR", () => {
+  it(`Minimal valid entry passes validation`, async () => {
     setSitesYmlContent(`
       - title: lorem
         url: http://google.com/
@@ -55,7 +53,7 @@ describe('a new PR', () => {
     expect(mockedUtils.addErrorMsg).not.toBeCalled()
   })
 
-  it (`Full valid entry passes validation`, async () => {
+  it(`Full valid entry passes validation`, async () => {
     setSitesYmlContent(`
       - title: lorem
         url: http://google.com/
@@ -74,21 +72,41 @@ describe('a new PR', () => {
     expect(mockedUtils.addErrorMsg).not.toBeCalled()
   })
 
-  it (`Check for required fields and disallow unkown fields`, async() => {
+  it(`Check for required fields and disallow unkown fields`, async () => {
     setSitesYmlContent(`
       - test: loem
     `)
 
     await validateYaml()
     expect(dm.warn).toBeCalled()
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"title\" is required"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"url\" is required"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"main_url\" is required"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"categories\" is required"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"test\" is not allowed"), expect.anything())
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"title" is required'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"url" is required'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"main_url" is required'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"categories" is required'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"test" is not allowed'),
+      expect.anything()
+    )
   })
 
-  it (`Check type of fields`, async() => {
+  it(`Check type of fields`, async () => {
     setSitesYmlContent(`
     - title: 1
       url: 2
@@ -111,24 +129,92 @@ describe('a new PR', () => {
 
     await validateYaml()
     expect(dm.warn).toBeCalled()
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"title\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"url\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"main_url\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"source_url\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"description\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"categories\" must be an array"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"built_by\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"built_by_url\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"featured\" must be a boolean"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"url\" must be a valid uri with a scheme matching the https|http pattern"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"main_url\" must be a valid uri with a scheme matching the https|http pattern"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"source_url\" must be a valid uri with a scheme matching the https|http pattern"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"0\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"1\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"built_by_url\" must be a valid uri with a scheme matching the https|http pattern"), expect.anything())
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"title" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"url" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"main_url" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"source_url" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"description" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"categories" must be an array'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"built_by" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"built_by_url" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"featured" must be a boolean'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining(
+        '"url" must be a valid uri with a scheme matching the https|http pattern'
+      ),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining(
+        '"main_url" must be a valid uri with a scheme matching the https|http pattern'
+      ),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining(
+        '"source_url" must be a valid uri with a scheme matching the https|http pattern'
+      ),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining('"0" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining('"1" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining(
+        '"built_by_url" must be a valid uri with a scheme matching the https|http pattern'
+      ),
+      expect.anything()
+    )
   })
 
-  it (`Check for duplicates`, async() => {
+  it(`Check for duplicates`, async () => {
     setSitesYmlContent(`
     - title: lorem
       url: http://google.com/
@@ -154,9 +240,20 @@ describe('a new PR', () => {
 
     await validateYaml()
     expect(dm.warn).toBeCalled()
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"title\" is not unique"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(2, expect.stringContaining("\"url\" is not unique"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(3, expect.stringContaining("\"main_url\" is not unique"), expect.anything())
-
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining('"title" is not unique'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      2,
+      expect.stringContaining('"url" is not unique'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      3,
+      expect.stringContaining('"main_url" is not unique'),
+      expect.anything()
+    )
   })
 })

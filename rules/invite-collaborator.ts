@@ -1,4 +1,4 @@
-import { danger } from 'danger';
+import { danger } from "danger"
 
 const comment = (username: string) => `
 Holy buckets, @${username} — we just merged your PR to Gatsby! 💪💜
@@ -14,34 +14,34 @@ Thanks again!
 
 [store]: https://store.gatsbyjs.org
 [twitter]: https://twitter.com/gatsbyjs
-`;
+`
 
 export const inviteCollaborator = async () => {
-  const gh = danger.github;
-  const api = gh.api;
+  const gh = danger.github
+  const api = gh.api
 
   // Details about the repo.
-  const owner = gh.thisPR.owner;
-  const repo = gh.thisPR.repo;
-  const number = gh.thisPR.number;
+  const owner = gh.thisPR.owner
+  const repo = gh.thisPR.repo
+  const number = gh.thisPR.number
 
   // Details about the collaborator.
-  const username = gh.pr.user.login;
+  const username = gh.pr.user.login
 
   // Check whether or not we’ve already invited this contributor.
   try {
-    const inviteCheck = await api.orgs.getTeamMembership({
-      team_id: '1942254',
-      username
-    } as any) as any;
-    const isInvited = inviteCheck.headers.status !== '404';
+    const inviteCheck = (await api.orgs.getTeamMembership({
+      team_id: "1942254",
+      username,
+    } as any)) as any
+    const isInvited = inviteCheck.headers.status !== "404"
 
     // If we’ve already invited them, don’t spam them with more messages.
     if (isInvited) {
       console.log(
         `@${username} has already been invited to this org. Doing nothing.`
-      );
-      return;
+      )
+      return
     }
   } catch (_) {
     // If the user hasn’t been invited, the invite check throws an error.
@@ -50,20 +50,20 @@ export const inviteCollaborator = async () => {
   try {
     const invite = await api.orgs.addTeamMembership({
       // ID of the @gatsbyjs/maintainers team on GitHub
-      team_id: '1942254',
-      username
-    } as any);
+      team_id: "1942254",
+      username,
+    } as any)
 
-    if (invite.data.state === 'active') {
+    if (invite.data.state === "active") {
       console.log(
         `@${username} is already a ${invite.data.role} for this team.`
-      );
+      )
     } else {
-      console.log(`We’ve invited @${username} to join this team.`);
+      console.log(`We’ve invited @${username} to join this team.`)
     }
   } catch (err) {
-    console.log('Something went wrong.');
-    console.log(err);
+    console.log("Something went wrong.")
+    console.log(err)
   }
 
   // For new contributors, roll out the welcome wagon!
@@ -71,10 +71,10 @@ export const inviteCollaborator = async () => {
     owner,
     repo,
     number,
-    body: comment(username)
-  });
-};
+    body: comment(username),
+  })
+}
 
 export default async () => {
-  await inviteCollaborator();
-};
+  await inviteCollaborator()
+}

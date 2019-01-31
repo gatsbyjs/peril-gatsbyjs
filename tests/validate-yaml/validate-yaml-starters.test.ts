@@ -1,11 +1,12 @@
-jest.mock('danger', () => jest.fn());
-import * as danger from 'danger';
-import { validateYaml, utils } from '../../rules/validate-yaml';
-const dm = danger as any;
-const mockedUtils = utils as any;
+jest.mock("danger", () => jest.fn())
+import * as danger from "danger"
+import { validateYaml, utils } from "../../rules/validate-yaml"
+const dm = danger as any
+const mockedUtils = utils as any
 
 let mockedResponses: { [id: string]: any }
-const setStartersYmlContent = (content:string) => mockedResponses['docs/starters.yml'] = content
+const setStartersYmlContent = (content: string) =>
+  (mockedResponses["docs/starters.yml"] = content)
 const resetMockedResponses = () => {
   mockedResponses = {}
 }
@@ -19,29 +20,26 @@ beforeEach(() => {
   mockedUtils.addErrorMsg.mockClear()
   dm.danger = {
     git: {
-      modified_files: [
-        'docs/starters.yml'
-      ]
+      modified_files: ["docs/starters.yml"],
     },
     github: {
       pr: {
         head: {
           repo: {
-            full_name: 'test/test',
+            full_name: "test/test",
           },
-          ref: 'branch',
-        }
+          ref: "branch",
+        },
       },
       utils: {
-        fileContents: (path:string) => mockedResponses[path]
-      }
-    }
-  };
-  
-});
+        fileContents: (path: string) => mockedResponses[path],
+      },
+    },
+  }
+})
 
-describe('a new PR', () => {
-  it (`Valid entry passes validation`, async () => {
+describe("a new PR", () => {
+  it(`Valid entry passes validation`, async () => {
     setStartersYmlContent(`
     - url: http://gatsbyjs.github.io/gatsby-starter-default/
       repo: https://github.com/gatsbyjs/gatsby-starter-default
@@ -57,7 +55,7 @@ describe('a new PR', () => {
     expect(mockedUtils.addErrorMsg).not.toBeCalled()
   })
 
-  it (`Check for required fields and disallow unkown fields`, async() => {
+  it(`Check for required fields and disallow unkown fields`, async () => {
     setStartersYmlContent(`
       - test: loem
     `)
@@ -65,15 +63,39 @@ describe('a new PR', () => {
     await validateYaml()
     expect(dm.warn).toBeCalled()
     expect(mockedUtils.addErrorMsg).toHaveBeenCalledTimes(6)
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"url\" is required"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"repo\" is required"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"description\" is required"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"tags\" is required"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"features\" is required"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"test\" is not allowed"), expect.anything())
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"url" is required'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"repo" is required'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"description" is required'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"tags" is required'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"features" is required'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"test" is not allowed'),
+      expect.anything()
+    )
   })
 
-  it (`Check type of fields`, async() => {
+  it(`Check type of fields`, async () => {
     setStartersYmlContent(`
     - url: 1
       repo: 2
@@ -93,18 +115,58 @@ describe('a new PR', () => {
 
     await validateYaml()
     expect(dm.warn).toBeCalled()
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"url\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"repo\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"description\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"tags\" must be an array"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"features\" must be an array"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"url\" must be a valid uri with a scheme matching the https|http pattern"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"repo\" must be a valid uri with a scheme matching the https|http pattern"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"0\" must be a string"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"1\" must be a string"), expect.anything())
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"url" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"repo" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"description" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"tags" must be an array'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining('"features" must be an array'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining(
+        '"url" must be a valid uri with a scheme matching the https|http pattern'
+      ),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining(
+        '"repo" must be a valid uri with a scheme matching the https|http pattern'
+      ),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining('"0" must be a string'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining('"1" must be a string'),
+      expect.anything()
+    )
   })
 
-  it (`Doesn't allow non github repos`, async () => {
+  it(`Doesn't allow non github repos`, async () => {
     setStartersYmlContent(`
     - url: http://gatsbyjs.github.io/gatsby-starter-default/
       repo: https://gitlab.com/gatsbyjs/gatsby-starter-default
@@ -118,10 +180,16 @@ describe('a new PR', () => {
     await validateYaml()
     expect(dm.warn).toBeCalled()
     expect(mockedUtils.addErrorMsg).toHaveBeenCalledTimes(1)
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(0, expect.stringContaining("\"repo\" with value \"https://gitlab.com/gatsbyjs/gatsby-starter-default\" fails to match the required pattern: /^https?:\\/\\/github.com\\/[^\\/]+\\/[^\\/]+$/"), expect.anything())
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      0,
+      expect.stringContaining(
+        '"repo" with value "https://gitlab.com/gatsbyjs/gatsby-starter-default" fails to match the required pattern: /^https?:\\/\\/github.com\\/[^\\/]+\\/[^\\/]+$/'
+      ),
+      expect.anything()
+    )
   })
 
-  it (`Check for duplicates`, async() => {
+  it(`Check for duplicates`, async () => {
     setStartersYmlContent(`
     - url: http://gatsbyjs.github.io/gatsby-starter-default/
       repo: https://github.com/gatsbyjs/gatsby-starter-default
@@ -149,7 +217,15 @@ describe('a new PR', () => {
     await validateYaml()
     expect(dm.warn).toBeCalled()
     expect(mockedUtils.addErrorMsg).toHaveBeenCalledTimes(2)
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(1, expect.stringContaining("\"repo\" is not unique"), expect.anything())
-    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(2, expect.stringContaining("\"url\" is not unique"), expect.anything())
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      1,
+      expect.stringContaining('"repo" is not unique'),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      2,
+      expect.stringContaining('"url" is not unique'),
+      expect.anything()
+    )
   })
 })

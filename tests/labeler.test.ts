@@ -38,20 +38,20 @@ describe("a new issue", () => {
         repo: "gatsby",
         owner: "gatsbyjs",
         number: 100,
-        labels: ["question", "type: question or discussion"],
+        labels: ["type: question or discussion"],
       })
     })
   })
 
   it("with existing labels", () => {
     dm.danger.github.issue.title = "How are labels handled?"
-    dm.danger.github.issue.labels = [{ name: "question" }]
+    dm.danger.github.issue.labels = [{ name: "good first issue" }]
     return l.labeler().then(() => {
       expect(dm.danger.github.api.issues.addLabels).toBeCalledWith({
         repo: "gatsby",
         owner: "gatsbyjs",
         number: 100,
-        labels: ["question", "type: question or discussion"],
+        labels: ["good first issue", "type: question or discussion"],
       })
     })
   })
@@ -64,7 +64,7 @@ describe("a new issue", () => {
         repo: "gatsby",
         owner: "gatsbyjs",
         number: 100,
-        labels: ["question", "type: question or discussion"],
+        labels: ["type: question or discussion"],
       })
     })
   })
@@ -114,7 +114,7 @@ describe("a new issue", () => {
           action: "issues.addLabel",
           error: apiError,
           opts: {
-            labels: ["question", "type: question or discussion"],
+            labels: ["type: question or discussion"],
             number: 100,
             owner: "gatsbyjs",
             repo: "gatsby",

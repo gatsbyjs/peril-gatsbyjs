@@ -67,7 +67,7 @@ export const labeler = async () => {
   let labels: Set<string> = new Set(currentLabels)
 
   if (endsWith("?", title) || matchKeyword(questionWords, title, true)) {
-    labels.add("question").add("type: question or discussion")
+    labels.add("type: question or discussion")
   }
 
   if (matchKeyword(documentationWords, title)) {

@@ -11,6 +11,7 @@ const EXEMPT_LABEL = `not stale`
 const DAYS_TO_STALE = 20
 const DAYS_TO_CLOSE = 10
 const MAX_ACTIONS = 20
+const CONTRIBUTION_GUIDE_LINK = `https://www.gatsbyjs.org/contributing/how-to-contribute/`
 const STALE_MESSAGE = `Hiya!
 
 This issue has gone quiet. Spooky quiet. 👻
@@ -20,6 +21,8 @@ We get a lot of issues, so we currently close issues after ${DAYS_TO_STALE +
 
 If we missed this issue or if you want to keep it open, please reply here. You can also add the label "${EXEMPT_LABEL}" to keep this issue open!
 
+As a friendly reminder: the best way to see this issue, or any other, fixed is to open a Pull Request. Check out [gatsby.dev/contribute](${CONTRIBUTION_GUIDE_LINK})for more information about opening PRs, triaging issues, and contributing!
+
 Thanks for being a part of the Gatsby community! 💪💜`
 
 const CLOSE_MESSAGE = `Hey again!
@@ -28,6 +31,8 @@ It’s been ${DAYS_TO_STALE +
   DAYS_TO_CLOSE} days since anything happened on this issue, so our friendly neighborhood robot (that’s me!) is going to close it.
 
 Please keep in mind that I’m only a robot, so if I’ve closed this issue in error, I’m \`HUMAN_EMOTION_SORRY\`. Please feel free to reopen this issue or create a new one if you need anything else.
+
+As a friendly reminder: the best way to see this issue, or any other, fixed is to open a Pull Request. Check out [gatsby.dev/contribute](${CONTRIBUTION_GUIDE_LINK}) for more information about opening PRs, triaging issues, and contributing!
 
 Thanks again for being part of the Gatsby community!`
 

@@ -5,7 +5,7 @@ Holy buckets, @${username} — we just merged your PR to Gatsby! 💪💜
 
 Gatsby is built by awesome people like you. Let us say “thanks” in two ways:
 
- 1.  **We’d like to send you some Gatsby swag.** As a token of our appreciation, you can go to the [Gatsby Swag Store][store] and log in with your GitHub account to get a coupon code good for one free piece of swag. (Currently we’ve got a couple t-shirts available, plus some socks that are really razzing our berries right now.)
+ 1.  **We’d like to send you some Gatsby swag.** As a token of our appreciation, you can go to the [Gatsby Swag Store][store] and log in with your GitHub account to get a coupon code good for one free piece of swag. We’ve got Gatsby t-shirts, stickers, hats, scrunchies, and much more. (You can also unlock _even more_ free swag with 5 contributions — wink wink nudge nudge.) See [gatsby.dev/swag](https://gatsby.dev/swag) for details.
  2.  **We just invited you to join the Gatsby organization on GitHub.** This will add you to our team of maintainers. Accept the invite by visiting https://github.com/orgs/gatsbyjs/invitation. By joining the team, you’ll be able to label issues, review pull requests, and merge approved pull requests.
 
 If there’s anything we can do to help, please don’t hesitate to reach out to us: tweet at [@gatsbyjs][twitter] and we’ll come a-runnin’.

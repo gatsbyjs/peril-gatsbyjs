@@ -69,6 +69,27 @@ export const mergeOnGreen = async () => {
           repo: danger.github.repository.name,
         })
       }
+    } else if (danger.github.state === `success` && danger.github.commit) {
+      // this is for status.success
+
+      // search returns first 100 results, we are not handling pagination right now
+      // because it's unlikely to get more 100 results for given sha
+      const results = await danger.github.api.search.issues({
+        q: `${danger.github.commit.sha} is:open repo:${
+          danger.github.repository.owner.login
+        }/${danger.github.repository.name}`,
+      })
+
+      let i = 0
+      while (i < results.data.items.length) {
+        const pr = results.data.items[i]
+        i++
+        await checkPRConditionsAndMerge({
+          number: pr.number,
+          owner: danger.github.repository.owner.login,
+          repo: danger.github.repository.name,
+        })
+      }
     } else if (
       danger.github.action === `submitted` &&
       danger.github.pull_request

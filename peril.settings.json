@@ -24,7 +24,8 @@
       ],
       "check_suite.completed": [
         "gatsbyjs/peril-gatsbyjs@rules/merge-on-green.ts"
-      ]
+      ],
+      "status.success": ["gatsbyjs/peril-gatsbyjs@rules/merge-on-green.ts"]
     },
     "gatsbyjs/gatsby-starter-default": {
       "pull_request.opened": [

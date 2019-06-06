@@ -12,7 +12,13 @@ const checkPRConditionsAndMerge = async ({
 }) => {
   // we need to check if "bot: merge on green" label is applied and PR is mergeable (checks are green and have approval)
 
-  const pr = await danger.github.api.pullRequests.get({ number, owner, repo })
+  const userAuthedAPI = new octokit()
+  userAuthedAPI.authenticate({
+    type: "token",
+    token: peril.env.GITHUB_ACCESS_TOKEN,
+  })
+
+  const pr = await userAuthedAPI.pullRequests.get({ number, owner, repo })
 
   const isMergeButtonGreen = pr.data.mergeable_state === `clean`
 
@@ -30,11 +36,6 @@ const checkPRConditionsAndMerge = async ({
   })
 
   if (isMergeButtonGreen && hasMergeOnGreenLabel) {
-    const userAuthedAPI = new octokit()
-    userAuthedAPI.authenticate({
-      type: "token",
-      token: peril.env.GITHUB_ACCESS_TOKEN,
-    })
     await userAuthedAPI.pullRequests.merge({
       merge_method: `squash`,
       commit_title: `${pr.data.title} (#${number})`,

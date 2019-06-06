@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/danger/peril/master/peril-settings-json.schema",
   "settings": {
     "ignored_repos": [],
-    "env_vars": ["SLACK_WEBHOOK_URL"],
+    "env_vars": ["SLACK_WEBHOOK_URL", "GITHUB_ACCESS_TOKEN"],
     "modules": ["@slack/client", "joi", "js-yaml", "date-fns"]
   },
   "rules": {
@@ -16,6 +16,15 @@
     "gatsbyjs/gatsby": {
       "pull_request": ["gatsbyjs/peril-gatsbyjs@rules/validate-yaml.ts"],
       "check_run": ["gatsbyjs/peril-gatsbyjs@rules/validate-yaml.ts"],
+      "pull_request.labeled": [
+        "gatsbyjs/peril-gatsbyjs@rules/merge-on-green.ts"
+      ],
+      "pull_request_review.submitted": [
+        "gatsbyjs/peril-gatsbyjs@rules/merge-on-green.ts"
+      ],
+      "check_suite.completed": [
+        "gatsbyjs/peril-gatsbyjs@rules/merge-on-green.ts"
+      ]
     },
     "gatsbyjs/gatsby-starter-default": {
       "pull_request.opened": [

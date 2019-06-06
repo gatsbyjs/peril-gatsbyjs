@@ -19,6 +19,8 @@ const checkPRConditionsAndMerge = async ({
     label => label.name === `bot: merge on green`
   )
 
+  console.log({ isMergeButtonGreen, hasMergeOnGreenLabel })
+
   if (isMergeButtonGreen && hasMergeOnGreenLabel) {
     const userAuthedAPI = new octokit()
     userAuthedAPI.authenticate({

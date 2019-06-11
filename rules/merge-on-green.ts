@@ -1,6 +1,8 @@
 import { danger, peril } from "danger"
 import * as octokit from "@octokit/rest"
 
+const ACCEPTABLE_MERGEABLE_STATES = [`clean`, `unstable`]
+
 const checkPRConditionsAndMerge = async ({
   number,
   owner,
@@ -20,7 +22,9 @@ const checkPRConditionsAndMerge = async ({
 
   const pr = await userAuthedAPI.pullRequests.get({ number, owner, repo })
 
-  const isMergeButtonGreen = pr.data.mergeable_state === `clean`
+  const isMergeButtonGreen = ACCEPTABLE_MERGEABLE_STATES.includes(
+    pr.data.mergeable_state
+  )
 
   const hasMergeOnGreenLabel = pr.data.labels.some(
     label => label.name === `bot: merge on green`

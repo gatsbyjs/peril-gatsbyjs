@@ -19,7 +19,7 @@ Here are links to the relevant tools, docs, and apps we’re using:
 
 ### How the pieces fit together
 
-There are three parts to enabling automations on the Gatsby GitHub organisation (ignoring some of the nitty-gritty details). Those parts are:
+There are three parts to enabling automations on the Gatsby GitHub organization (ignoring some of the nitty-gritty details). Those parts are:
 
 - Events (issue comments, new pull requests etc) published from the Gatsby GitHub org to a server
 - An instance of Peril which receives and responds to those events

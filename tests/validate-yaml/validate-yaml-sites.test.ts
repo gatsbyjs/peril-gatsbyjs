@@ -47,10 +47,8 @@ describe("a new PR", () => {
         categories:
           - Web Development
     `)
-
-    await validateYaml()
-    expect(dm.warn).not.toBeCalled()
     expect(mockedUtils.addErrorMsg).not.toBeCalled()
+    expect(dm.warn).not.toBeCalled()
   })
 
   it(`Full valid entry passes validation`, async () => {
@@ -62,14 +60,16 @@ describe("a new PR", () => {
         description: lorem
         categories:
           - Web Development
+          - WordPress
         built_by: lorem
         built_by_url: http://google.com/
         featured: false
     `)
 
     await validateYaml()
-    expect(dm.warn).not.toBeCalled()
+
     expect(mockedUtils.addErrorMsg).not.toBeCalled()
+    expect(dm.warn).not.toBeCalled()
   })
 
   it(`Check for required fields and disallow unkown fields`, async () => {
@@ -125,6 +125,12 @@ describe("a new PR", () => {
         - 1
         - true
       built_by_url: www.google.com
+    - title: lorem
+      url: http://google.com/
+      main_url: http://google.com/
+      categories:
+        - Fancy new category
+        - Oh I'm so smart and original
     `)
 
     await validateYaml()
@@ -209,6 +215,13 @@ describe("a new PR", () => {
       1,
       expect.stringContaining(
         '"built_by_url" must be a valid uri with a scheme matching the https|http pattern'
+      ),
+      expect.anything()
+    )
+    expect(mockedUtils.addErrorMsg).toHaveBeenCalledWith(
+      2,
+      expect.stringContaining(
+        `"0" must be one of [API, Accessibility, Agency, App, Blog, Business, Community, Conference, Consulting, Data, Design, Design System, Directory, Documentation, Education, Entertainment, Entrepreneurship, Event, Featured, Finance, Food, Freelance, Gallery, Government, Healthcare, JavaScript, Landing Page, Learning, Library, Marketing, Mobile Development, Music, Nonprofit, Open Source, Photography, Podcast, Portfolio, Productivity, Programming, Real Estate, SEO, Science, Security, Sports, Technology, Travel, User Experience, Video, Web Development, WordPress, eCommerce]`
       ),
       expect.anything()
     )

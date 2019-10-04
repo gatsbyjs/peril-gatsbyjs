@@ -1,3 +1,5 @@
+> Note: this code has been moved to the Gatsby monorepo. See: https://github.com/gatsbyjs/gatsby/tree/master/peril 
+
 # Gatsby's Peril Settings
 
 This is the configuration repo for Peril on the GatsbyJS org. There’s a [settings file](peril.settings.json) and org-wide dangerfiles which are inside the [rules folder](rules).
